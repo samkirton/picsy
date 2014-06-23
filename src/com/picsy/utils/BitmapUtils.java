@@ -17,16 +17,16 @@ public class BitmapUtils {
 		Matrix matrix = new Matrix();
 		matrix.postRotate(-90);
 		
-		bitmap = Bitmap.createBitmap(
+		Bitmap newBitmap = Bitmap.createBitmap(
 			bitmap, 
 			heightCrop, 
 			0, 
-			bitmap.getWidth()-heightCrop-yCrop,
+			bitmap.getHeight(),
 			bitmap.getHeight(), 
 			matrix, 
 			true
 		);
 		
-		return bitmap;
+		return newBitmap;
 	}
 }

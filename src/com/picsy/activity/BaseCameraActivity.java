@@ -1,7 +1,6 @@
 package com.picsy.activity;
 
 import java.io.IOException;
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -30,7 +31,6 @@ import android.widget.RelativeLayout;
 
 import com.picsy.R;
 import com.picsy.provider.CameraProvider;
-import com.picsy.utils.BitmapUtils;
 import com.picsy.utils.CameraUtils;
 import com.picsy.utils.CapturePhotoUtils;
 import com.picsy.view.CameraGridView;
@@ -53,7 +53,7 @@ public abstract class BaseCameraActivity extends Activity implements
 	private FrameLayout uiCaptureAnimationLayout;
 	private FrameLayout uiControlsLayout;
 	private int mCameraState = CAMERA_STOPPED;
-	private int mCameraType = Camera.CameraInfo.CAMERA_FACING_FRONT;
+	private int mCameraType = Camera.CameraInfo.CAMERA_FACING_BACK;
 	private String mCameraResponseType;
 	private Camera mCamera;
 	private Camera.Parameters mCameraParameters;
@@ -72,7 +72,6 @@ public abstract class BaseCameraActivity extends Activity implements
 	public static final String PARAM_FLASH_OFF = "PARAM_FLASH_OFF";
 	
 	public static final String EXTRA_CAMERA_RESPONSE_TYPE = "EXTRA_CAMERA_RESPONSE_TYPE";
-	public static final String EXTRA_PHOTO_BYTE_DATA = "EXTRA_PHOTO_BYTE_DATA";
 	public static final int EXTRA_CAMERA_RESULT_CODE = 0x41548387;
 	/**
 	 * The camera should be closed and the data sent back to the consuming activity
@@ -101,7 +100,7 @@ public abstract class BaseCameraActivity extends Activity implements
 	}
 	
 	/**
-	 * Speed up the resizing image by running it in a seperate process
+	 * Speed up the resizing image by running it in a separate process
 	 */
 	private class ResizeImageThread extends Thread {
 		@Override
@@ -111,13 +110,15 @@ public abstract class BaseCameraActivity extends Activity implements
 				0, 
 				mPhotoData.length
 			);
-			
+
 			String uri = CapturePhotoUtils.insertImage(
 				getContentResolver(), 
-				BitmapUtils.cropBitmap(bitmap, mPhotoYCrop, mPhotoHeightCrop), 
+				bitmap, 
 				"proffer", 
 				"description"
 			);
+			
+			bitmap.recycle();
 			
 			Message msg = new Message();
 			msg.what = CAMERA_PHOTO_CAPTURE;
@@ -213,7 +214,7 @@ public abstract class BaseCameraActivity extends Activity implements
 			Point point = CameraUtils.getDefaultDisplaySize(this);
 			int displayWidth = point.x;
 			int displayHeight = point.y;
-			
+
 			uiCameraPreviewSurfaceView.init(displayWidth,displayHeight);
 			setCameraHolder(uiCameraPreviewSurfaceView.getHolder());
 		}
@@ -222,11 +223,15 @@ public abstract class BaseCameraActivity extends Activity implements
 	/**
 	 * Handle the photo capture
 	 */
-	private void photoCaptured(String uri) {
-		Intent intent = new Intent(this, EditActivity.class);
-		intent.putExtra(EditActivity.EXTRA_PHOTO_HEIGHT, mPhotoHeight);
+	private void photoCaptured(String uri) {		
+		Intent intent = new Intent(EditActivity.BROADCAST_PHOTO_CAPTURED);
 		intent.putExtra(EditActivity.EXTRA_PHOTO_URI, uri);
-		startActivity(intent);
+		intent.putExtra(EditActivity.EXTRA_PHOTO_HEIGHT, mPhotoHeight);
+		
+		intent.putExtra(EditActivity.EXTRA_PHOTO_Y_CROP,mPhotoYCrop);
+		intent.putExtra(EditActivity.EXTRA_PHOTO_HEIGHT_CROP,mPhotoHeightCrop);
+		
+		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
 	
 	/**
@@ -282,20 +287,18 @@ public abstract class BaseCameraActivity extends Activity implements
 	private void updateCameraParameters() {
 		mCameraParameters = mCamera.getParameters();
 		
-		// select the correct orientation
 		CameraUtils.setDisplayOrientation(mCamera, mCameraType, this);
-		
-		// calculate the preview size
 		Size size = mCameraParameters.getPictureSize();
-        List<Size> sizes = mCameraParameters.getSupportedPreviewSizes();
         Size optimalSize = CameraUtils.getOptimalPreviewSize(
-        	this, 
-        	sizes,
-        	(double) size.width / size.height
+    		this,
+        	mCameraParameters.getSupportedPreviewSizes(),
+        	(double)size.width / size.height
         );
-        
+
+        mCameraParameters.setPictureFormat(ImageFormat.JPEG);
+        mCameraParameters.setJpegQuality(30);
         mCameraParameters.setPreviewSize(optimalSize.width, optimalSize.height);
-        
+
 		// enabled continuous focus if it is available
 		if (CameraUtils.isAutoFocusContinousPictureSupported(mCameraParameters, getApplicationContext())) {
 			mCameraParameters.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
@@ -421,11 +424,14 @@ public abstract class BaseCameraActivity extends Activity implements
 	public void onPictureTaken(final byte[] data, Camera camera) {
 		if (mCameraResponseType.equals(EXTRA_CAMERA_IMMEDIATE)) {
 			Intent intent = new Intent();
-			intent.putExtra(EXTRA_PHOTO_BYTE_DATA, data);
 			setResult(EXTRA_CAMERA_RESULT_CODE, intent);
 		} else if (mCameraResponseType.equals(EXTRA_CAMERA_RESIZE)) {
 			mPhotoData = data;
 			new ResizeImageThread().start();
+			
+			Intent intent = new Intent(this, EditActivity.class);
+			intent.putExtra(EditActivity.EXTRA_PHOTO_HEIGHT, mPhotoHeight);
+			startActivity(intent);
 		}
 	}
 

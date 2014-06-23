@@ -17,6 +17,7 @@ public class CameraGridView extends View {
 	private int mSectionWidth;
 	private int mSectionHeight;
 	private Paint mLinePaint;
+	private boolean hasInit;
 	
 	private static final float HAIRLINE = 0f;
 	
@@ -50,6 +51,7 @@ public class CameraGridView extends View {
 		mHeight = height;
 		mSectionWidth = sectionWidth;
 		mSectionHeight = sectionHeight;
+		hasInit = true;
 		invalidate();
 	}
 	
@@ -62,26 +64,28 @@ public class CameraGridView extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		
-		int xSections = (int)Math.floor(mWidth / mSectionWidth);
-		for (int i = 1; i <= xSections; i++) {
-			canvas.drawLine(
-				mSectionWidth*i,
-				0, 
-				mSectionWidth*i, 
-				mHeight, 
-				mLinePaint
-			);
-		}
-		
-		int ySections = (int)Math.floor(mHeight / mSectionHeight);
-		for (int i = 1; i <= ySections; i++) {
-			canvas.drawLine(
-				0,
-				mSectionHeight*i, 
-				mWidth, 
-				mSectionHeight*i, 
-				mLinePaint
-			);
+		if (hasInit) {
+			int xSections = (int)Math.floor(mWidth / mSectionWidth);
+			for (int i = 1; i <= xSections; i++) {
+				canvas.drawLine(
+					mSectionWidth*i,
+					0, 
+					mSectionWidth*i, 
+					mHeight, 
+					mLinePaint
+				);
+			}
+			
+			int ySections = (int)Math.floor(mHeight / mSectionHeight);
+			for (int i = 1; i <= ySections; i++) {
+				canvas.drawLine(
+					0,
+					mSectionHeight*i, 
+					mWidth, 
+					mSectionHeight*i, 
+					mLinePaint
+				);
+			}
 		}
 	}
 }
