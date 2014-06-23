@@ -5,7 +5,10 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
@@ -27,7 +30,9 @@ import android.widget.RelativeLayout;
 
 import com.picsy.R;
 import com.picsy.provider.CameraProvider;
+import com.picsy.utils.BitmapUtils;
 import com.picsy.utils.CameraUtils;
+import com.picsy.utils.CapturePhotoUtils;
 import com.picsy.view.CameraGridView;
 import com.picsy.view.PreviewSurfaceView;
 
@@ -47,14 +52,18 @@ public abstract class BaseCameraActivity extends Activity implements
 	private FrameLayout uiCapturePhotoHeaderLayout;
 	private FrameLayout uiCaptureAnimationLayout;
 	private FrameLayout uiControlsLayout;
-	;
 	private int mCameraState = CAMERA_STOPPED;
 	private int mCameraType = Camera.CameraInfo.CAMERA_FACING_FRONT;
+	private String mCameraResponseType;
 	private Camera mCamera;
 	private Camera.Parameters mCameraParameters;
 	private CameraStartThread mCameraStartThread;
 	private CameraHandler mCameraHandler;
 	private boolean mIsGridShowing;
+	private int mPhotoYCrop;
+	private int mPhotoHeightCrop;
+	private int mPhotoHeight;
+	private byte[] mPhotoData;
 	private Animation mCaptureAnimation;
 
 	public static final int MEDIA_TYPE_IMAGE = 1;
@@ -62,9 +71,23 @@ public abstract class BaseCameraActivity extends Activity implements
 	public static final String PARAM_FLASH_AUTO = "PARAM_FLASH_AUTO";
 	public static final String PARAM_FLASH_OFF = "PARAM_FLASH_OFF";
 	
+	public static final String EXTRA_CAMERA_RESPONSE_TYPE = "EXTRA_CAMERA_RESPONSE_TYPE";
+	public static final String EXTRA_PHOTO_BYTE_DATA = "EXTRA_PHOTO_BYTE_DATA";
+	public static final int EXTRA_CAMERA_RESULT_CODE = 0x41548387;
+	/**
+	 * The camera should be closed and the data sent back to the consuming activity
+	 * as soon as the photo has been taken
+	 */
+	public static final String EXTRA_CAMERA_IMMEDIATE = "EXTRA_CAMERA_IMMEDIATE";
+	/**
+	 * When the photo has been taken the EditActivity should be opened with the photo
+	 */
+	public static final String EXTRA_CAMERA_RESIZE = "EXTRA_CAMERA_RESIZE";
+	
 	private static final int CAMERA_STOPPED = 0x1;
 	private static final int CAMERA_OPEN_SUCCESS = 0x2;
 	private static final int CAMERA_OPEN_FAIL = 0x3;
+	private static final int CAMERA_PHOTO_CAPTURE = 0x4;
 	
 	/**
 	 * Stop the UI being blocked when the camera starts in onCreate and onResume
@@ -74,6 +97,32 @@ public abstract class BaseCameraActivity extends Activity implements
 		public void run() {
 			mCamera = CameraProvider.getCamera(mCameraType);
 			mCameraHandler.sendEmptyMessage(CAMERA_OPEN_SUCCESS);
+		}
+	}
+	
+	/**
+	 * Speed up the resizing image by running it in a seperate process
+	 */
+	private class ResizeImageThread extends Thread {
+		@Override
+		public void run() {
+			Bitmap bitmap = BitmapFactory.decodeByteArray(
+				mPhotoData, 
+				0, 
+				mPhotoData.length
+			);
+			
+			String uri = CapturePhotoUtils.insertImage(
+				getContentResolver(), 
+				BitmapUtils.cropBitmap(bitmap, mPhotoYCrop, mPhotoHeightCrop), 
+				"proffer", 
+				"description"
+			);
+			
+			Message msg = new Message();
+			msg.what = CAMERA_PHOTO_CAPTURE;
+			msg.obj = uri;
+			mCameraHandler.sendMessage(msg);
 		}
 	}
 	
@@ -90,6 +139,10 @@ public abstract class BaseCameraActivity extends Activity implements
 					
 				case CAMERA_OPEN_FAIL:
 					break;
+					
+				case CAMERA_PHOTO_CAPTURE:
+					photoCaptured((String)msg.obj);
+					break;
 			}
 		}
 	}
@@ -97,6 +150,10 @@ public abstract class BaseCameraActivity extends Activity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mCameraResponseType = getIntent().getStringExtra(EXTRA_CAMERA_RESPONSE_TYPE);
+		
+		if (mCameraResponseType == null)
+			throw new IllegalStateException("The CameraActivity requires a value for EXTRA_CAMERA_RESPONSE_TYPE");
 		
 		mCameraHandler = new CameraHandler();
 		
@@ -160,6 +217,16 @@ public abstract class BaseCameraActivity extends Activity implements
 			uiCameraPreviewSurfaceView.init(displayWidth,displayHeight);
 			setCameraHolder(uiCameraPreviewSurfaceView.getHolder());
 		}
+	}
+	
+	/**
+	 * Handle the photo capture
+	 */
+	private void photoCaptured(String uri) {
+		Intent intent = new Intent(this, EditActivity.class);
+		intent.putExtra(EditActivity.EXTRA_PHOTO_HEIGHT, mPhotoHeight);
+		intent.putExtra(EditActivity.EXTRA_PHOTO_URI, uri);
+		startActivity(intent);
 	}
 	
 	/**
@@ -318,6 +385,10 @@ public abstract class BaseCameraActivity extends Activity implements
 		int gridViewHeight = height - remaindingScreen - headerHeight;
 		int gridSectionWidth = width / 3;
 		
+		mPhotoYCrop = headerHeight;
+		mPhotoHeightCrop = remaindingScreen;
+		mPhotoHeight = gridViewHeight;
+		
 		// add grid view
 		uiCameraGridView = new CameraGridView(this);
 		uiCameraGridView.init(
@@ -348,7 +419,14 @@ public abstract class BaseCameraActivity extends Activity implements
 
 	@Override
 	public void onPictureTaken(final byte[] data, Camera camera) {
-		//TODO: handle picture
+		if (mCameraResponseType.equals(EXTRA_CAMERA_IMMEDIATE)) {
+			Intent intent = new Intent();
+			intent.putExtra(EXTRA_PHOTO_BYTE_DATA, data);
+			setResult(EXTRA_CAMERA_RESULT_CODE, intent);
+		} else if (mCameraResponseType.equals(EXTRA_CAMERA_RESIZE)) {
+			mPhotoData = data;
+			new ResizeImageThread().start();
+		}
 	}
 
 	@Override
