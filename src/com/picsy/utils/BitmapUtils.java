@@ -19,6 +19,7 @@ public class BitmapUtils {
 	public static Bitmap cropBitmap(Bitmap bitmap, int yCrop, int heightCrop, int rotation) {
 		Matrix matrix = new Matrix();
 		matrix.postRotate(rotation);
+		matrix.setScale(-1, 1);
 		
 		Bitmap newBitmap = Bitmap.createBitmap(
 			bitmap, 
@@ -62,5 +63,26 @@ public class BitmapUtils {
 		} catch (IOException e) { }
 		
 		return rotate;
+	}
+	
+	/**
+	 * Apply a rotation to the provided bitmap
+	 * @param	rotation	How much the bitmap should rotate by
+	 * @param	srcBitmap	The source bitmap
+	 * @return	A new bitmap with the rotation applied
+	 */
+	public static Bitmap rotateBitmap(int rotation, Bitmap srcBitmap) {
+		Matrix matrix = new Matrix();
+		matrix.setRotate(rotation,srcBitmap.getWidth()/2,srcBitmap.getHeight()/2);
+		
+		return Bitmap.createBitmap(
+			srcBitmap, 
+			0, 
+			0, 
+			srcBitmap.getWidth(), 
+			srcBitmap.getHeight(), 
+			matrix, 
+			false
+		);
 	}
 }

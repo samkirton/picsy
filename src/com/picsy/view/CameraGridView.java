@@ -56,7 +56,7 @@ public class CameraGridView extends View {
 	}
 	
 	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {		
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		setMeasuredDimension(mWidth, mHeight);
 	}
 	

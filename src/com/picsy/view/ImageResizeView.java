@@ -15,16 +15,19 @@ import com.picsy.R;
  * @author samuelkirton
  */
 public class ImageResizeView extends FrameLayout implements OnTouchListener {
-	private View mTopLeftPoint;
-	private View mTopRightPoint;
-	private View mBottomRightPoint;
-	private View mBottomLeftPoint;
+	private View uiTopLeftPoint;
+	private View uiTopRightPoint;
+	private View uiBottomRightPoint;
+	private View uiBottomLeftPoint;
+	private FrameLayout uiResizeContainer;
 	
 	private float mLastTouchX;
 	private float mLastTouchY;
 	private int mActivePointerId;
-	private float mPosX;
-	private float mPosY;
+	private int mMaxWidth;
+	private int mMaxHeight;
+	private int mMinWidth;
+	private int mMinHeight;
 	
 	private static final int DIRECTION_TOP_LEFT = 0x0;
 	private static final int DIRECTION_TOP_RIGHT = 0x1;
@@ -34,45 +37,74 @@ public class ImageResizeView extends FrameLayout implements OnTouchListener {
 	
 	public ImageResizeView(Context context) {
 		super(context);
-		init();
+		setup();
 	}
 	
 	public ImageResizeView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
+		setup();
 	}
 	
-	private void init() {
+	private void setup() {
 		LayoutInflater inflater = LayoutInflater.from(getContext());
 		inflater.inflate(R.layout.view_image_resize, this, true);
 		
-		mTopLeftPoint = findViewById(R.id.view_image_resize_top_left);
-		mTopRightPoint = findViewById(R.id.view_image_resize_top_right);
-		mBottomRightPoint = findViewById(R.id.view_image_resize_bottom_right);
-		mBottomLeftPoint = findViewById(R.id.view_image_resize_bottom_left);
+		uiTopLeftPoint = findViewById(R.id.view_image_resize_top_left);
+		uiTopRightPoint = findViewById(R.id.view_image_resize_top_right);
+		uiBottomRightPoint = findViewById(R.id.view_image_resize_bottom_right);
+		uiBottomLeftPoint = findViewById(R.id.view_image_resize_bottom_left);
+		uiResizeContainer = (FrameLayout)findViewById(R.id.view_image_resize_container);
 		
-		mTopLeftPoint.setOnTouchListener(this);
-		mTopRightPoint.setOnTouchListener(this);
-		mBottomRightPoint.setOnTouchListener(this);
-		mBottomLeftPoint.setOnTouchListener(this);
-		setOnTouchListener(this);
+		uiTopLeftPoint.setOnTouchListener(this);
+		uiTopRightPoint.setOnTouchListener(this);
+		uiBottomRightPoint.setOnTouchListener(this);
+		uiBottomLeftPoint.setOnTouchListener(this);
+		uiResizeContainer.setOnTouchListener(this);
+	}
+	
+	/**
+	 * Initialise the view
+	 * @param 	maxWidth	The maximum resize width
+	 * @param	maxHeight	The maximum resize height
+	 */
+	public void init(int maxWidth, int maxHeight, int minWidth, int minHeight) {
+		mMaxWidth = maxWidth;
+		mMaxHeight = maxHeight;
+		mMinWidth = minWidth;
+		mMinHeight = minHeight;
 	}
 	
 	private void resizeLayout(int x, int y, View v) {
-		if (v == mBottomRightPoint) {
+		if (v == uiBottomRightPoint) {
 			// increase the width
 			// increase the height
-			FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)getLayoutParams();
+			FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)uiResizeContainer.getLayoutParams();
 			params.width += x;
 			params.height += y;
-			setLayoutParams(params);
-		} else if (v == this) {
+			setContainerParams(uiResizeContainer,params,x,y);
+		} else if (v == uiResizeContainer) {
 			// move the whole container
-			FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)getLayoutParams();
+			FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)uiResizeContainer.getLayoutParams();
 			params.leftMargin += x;
 			params.topMargin += y;
-			setLayoutParams(params);
+			setContainerParams(uiResizeContainer,params,x,y);
 		}
+	}
+	
+	private void setContainerParams(FrameLayout container, FrameLayout.LayoutParams params, int x, int y) {
+		if ((params.width + x) > mMaxWidth)
+			params.width = mMaxWidth;
+		
+		if ((params.height + y) > mMaxHeight) 
+			params.height = mMaxHeight;
+		
+		if ((params.width + x) < mMinWidth)
+			params.width = mMinWidth;
+		
+		if ((params.height + y) < mMinHeight)
+			params.height = mMinHeight;
+
+		container.setLayoutParams(params);
 	}
 	
 	@Override
@@ -104,9 +136,6 @@ public class ImageResizeView extends FrameLayout implements OnTouchListener {
 			    // Calculate the distance moved
 			    final float dx = x - mLastTouchX;
 			    final float dy = y - mLastTouchY;
-			
-			    mPosX += dx;
-			    mPosY += dy;
 			
 			    // Remember this touch position for the next move event
 			    mLastTouchX = x;

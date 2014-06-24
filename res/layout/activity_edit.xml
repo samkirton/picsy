@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"/>
     
     <com.picsy.view.ImageResizeView 
+        android:id="@+id/activity_edit_imageresizeview"
 		android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_gravity="center_vertical|center_horizontal"/>
@@ -25,5 +26,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"/>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+		<Button
+	        android:id="@+id/activity_edit_rotate"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="rotate"/>
+        
+    </LinearLayout>
 
 </FrameLayout>

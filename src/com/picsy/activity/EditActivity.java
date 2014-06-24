@@ -8,12 +8,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -22,14 +25,17 @@ import com.picsy.R;
 import com.picsy.utils.BitmapUtils;
 import com.picsy.utils.ContentUtils;
 import com.picsy.view.CameraGridView;
+import com.picsy.view.ImageResizeView;
 
 /**
  * @author samuelkirton
  */
-public class EditActivity extends Activity {
+public class EditActivity extends Activity implements OnClickListener {
 	private ImageView uiImageDisplayView;
 	private CameraGridView uiCameraGridView;
 	private ProgressBar uiProgressBar;
+	private ImageResizeView uiImageResizeView;
+	private Button uiRotateButton;
 	
 	private Context mContext;
 	private int mPhotoHeight;
@@ -95,6 +101,10 @@ public class EditActivity extends Activity {
 		uiImageDisplayView = (ImageView)findViewById(R.id.activity_edit_imageview);
 		uiCameraGridView = (CameraGridView)findViewById(R.id.activity_edit_gridView);
 		uiProgressBar = (ProgressBar)findViewById(R.id.activity_edit_progressbar);
+		uiImageResizeView = (ImageResizeView)findViewById(R.id.activity_edit_imageresizeview);
+		uiRotateButton = (Button)findViewById(R.id.activity_edit_rotate);
+		
+		uiRotateButton.setOnClickListener(this);
 		
 		mContext = this;
 	}
@@ -130,5 +140,23 @@ public class EditActivity extends Activity {
 			mPhotoHeight/3, 
 			mPhotoHeight/3
 		);
+		
+		uiImageResizeView.setLayoutParams(gridViewparams);
+		uiImageResizeView.init(mPhotoHeight, mPhotoHeight, 700, 700);
+	}
+	
+	/**
+	 * Rotate the image view
+	 */
+	private void rotate_Click() {
+		Bitmap rotateBitmap = BitmapUtils.rotateBitmap(90, ((BitmapDrawable)uiImageDisplayView.getDrawable()).getBitmap());
+		uiImageDisplayView.setImageBitmap(rotateBitmap);
+	}
+
+	@Override
+	public void onClick(View v) {
+		if (v == uiRotateButton) {
+			rotate_Click();
+		} 
 	}
 }
