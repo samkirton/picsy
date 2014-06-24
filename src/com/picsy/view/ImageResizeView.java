@@ -46,9 +46,15 @@ public class ImageResizeView extends FrameLayout implements OnTouchListener {
 		LayoutInflater inflater = LayoutInflater.from(getContext());
 		inflater.inflate(R.layout.view_image_resize, this, true);
 		
+		mTopLeftPoint = findViewById(R.id.view_image_resize_top_left);
+		mTopRightPoint = findViewById(R.id.view_image_resize_top_right);
 		mBottomRightPoint = findViewById(R.id.view_image_resize_bottom_right);
+		mBottomLeftPoint = findViewById(R.id.view_image_resize_bottom_left);
 		
+		mTopLeftPoint.setOnTouchListener(this);
+		mTopRightPoint.setOnTouchListener(this);
 		mBottomRightPoint.setOnTouchListener(this);
+		mBottomLeftPoint.setOnTouchListener(this);
 	}
 	
 	private void resizeLayout(int x, int y, View v) {
@@ -59,6 +65,8 @@ public class ImageResizeView extends FrameLayout implements OnTouchListener {
 			params.width += x;
 			params.height += y;
 			setLayoutParams(params);
+		} else if (v == this) {
+			System.out.println("MOVE!!");
 		}
 	}
 	

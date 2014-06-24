@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#00FFCC">
-
+    android:layout_height="match_parent">
+        
+    <View
+        android:id="@+id/view_image_resize_top_left"
+        android:layout_width="@dimen/view_image_resize_point_width"
+        android:layout_height="@dimen/view_image_resize_point_width"
+        android:layout_gravity="left|top"
+        android:background="@drawable/point"
+        android:padding="@dimen/view_image_resize_point_padding"/>
+    
+	<View
+	    android:id="@+id/view_image_resize_bottom_left"
+        android:layout_width="@dimen/view_image_resize_point_width"
+        android:layout_height="@dimen/view_image_resize_point_width"
+        android:layout_gravity="left|bottom"
+        android:background="@drawable/point"
+        android:padding="@dimen/view_image_resize_point_padding"/>
+	
+	<View
+	    android:id="@+id/view_image_resize_top_right"
+        android:layout_width="@dimen/view_image_resize_point_width"
+        android:layout_height="@dimen/view_image_resize_point_width"
+        android:layout_gravity="right|top"
+        android:background="@drawable/point"
+        android:padding="@dimen/view_image_resize_point_padding"/>
+	
 	<View
 	    android:id="@+id/view_image_resize_bottom_right"
         android:layout_width="@dimen/view_image_resize_point_width"
@@ -11,5 +34,11 @@
         android:layout_gravity="right|bottom"
         android:background="@drawable/point"
         android:padding="@dimen/view_image_resize_point_padding"/>
-
+	
+	<View
+	    android:id="@+id/view_image_resize_container"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:background="#CC000000"/>
+	
 </FrameLayout>
