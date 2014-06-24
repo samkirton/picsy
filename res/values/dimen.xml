@@ -2,4 +2,6 @@
 <resources>
     <dimen name="padding_medium">10dp</dimen>
     <dimen name="padding_large">20dp</dimen>
+    <dimen name="view_image_resize_point_width">30dp</dimen>
+    <dimen name="view_image_resize_point_padding">20dp</dimen>
 </resources>

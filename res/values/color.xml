@@ -5,4 +5,5 @@
     <color name="activity_camera_controls_background">#111111</color>
     <color name="activity_camera_flash_background">#FFFFFF</color>
     <color name="view_camera_grid_border">#FFFFFF</color>
+    <color name="view_image_resize_point_background">#FFFFFF</color>
 </resources>
