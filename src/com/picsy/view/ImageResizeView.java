@@ -55,6 +55,7 @@ public class ImageResizeView extends FrameLayout implements OnTouchListener {
 		mTopRightPoint.setOnTouchListener(this);
 		mBottomRightPoint.setOnTouchListener(this);
 		mBottomLeftPoint.setOnTouchListener(this);
+		setOnTouchListener(this);
 	}
 	
 	private void resizeLayout(int x, int y, View v) {
@@ -66,7 +67,11 @@ public class ImageResizeView extends FrameLayout implements OnTouchListener {
 			params.height += y;
 			setLayoutParams(params);
 		} else if (v == this) {
-			System.out.println("MOVE!!");
+			// move the whole container
+			FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)getLayoutParams();
+			params.leftMargin += x;
+			params.topMargin += y;
+			setLayoutParams(params);
 		}
 	}
 	
@@ -103,12 +108,11 @@ public class ImageResizeView extends FrameLayout implements OnTouchListener {
 			    mPosX += dx;
 			    mPosY += dy;
 			
-			    resizeLayout((int)dx,(int)dy,v);
-			
 			    // Remember this touch position for the next move event
 			    mLastTouchX = x;
 			    mLastTouchY = y;
-			
+			    
+			    resizeLayout((int)dx,(int)dy,v);
 			    break;
 			            
 		    case MotionEvent.ACTION_UP:
