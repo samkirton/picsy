@@ -7,7 +7,8 @@
     <ImageView
         android:id="@+id/activity_edit_imageview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"/>
     
     <com.picsy.view.CameraGridView
         android:id="@+id/activity_edit_gridView"

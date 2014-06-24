@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ import android.widget.ProgressBar;
 
 import com.picsy.R;
 import com.picsy.utils.BitmapUtils;
+import com.picsy.utils.ContentUtils;
 import com.picsy.view.CameraGridView;
 
 /**
@@ -34,6 +36,8 @@ public class EditActivity extends Activity {
 	private String mPhotoUri;
 	private int mPhotoYCrop;
 	private int mPhotoHeightCrop;
+	private Uri mUri;
+	private String mRealPath;
 	
 	public static final String EXTRA_PHOTO_URI = "EXTRA_PHOTO_URI";
 	public static final String EXTRA_PHOTO_HEIGHT = "EXTRA_PHOTO_HEIGHT";
@@ -48,6 +52,9 @@ public class EditActivity extends Activity {
 			mPhotoUri = intent.getStringExtra(EXTRA_PHOTO_URI);
 			mPhotoYCrop = intent.getIntExtra(EXTRA_PHOTO_Y_CROP,-1);
 			mPhotoHeightCrop = intent.getIntExtra(EXTRA_PHOTO_HEIGHT_CROP,-1);
+			
+			mUri = Uri.parse(mPhotoUri);
+			mRealPath = ContentUtils.getRealPathFromURI(mUri, mContext);
 			new CameraStartThread().start();
 		}
 	};
@@ -56,9 +63,10 @@ public class EditActivity extends Activity {
 		@Override
 		public void run() {
 			Bitmap croppedBitmap = null;
-			try {
-				Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), Uri.parse(mPhotoUri));
-				croppedBitmap = BitmapUtils.cropBitmap(bitmap, mPhotoYCrop, mPhotoHeightCrop);
+			try {				
+				Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), mUri);
+				int rotation = BitmapUtils.necessaryPortraitRotation(mRealPath);
+				croppedBitmap = BitmapUtils.cropBitmap(bitmap, mPhotoYCrop, mPhotoHeightCrop,rotation);
 				bitmap.recycle();
 			} catch (IOException e) { }
 			
@@ -114,6 +122,7 @@ public class EditActivity extends Activity {
 		uiProgressBar.setVisibility(View.GONE);
 		
 		FrameLayout.LayoutParams gridViewparams = new FrameLayout.LayoutParams(mPhotoHeight, mPhotoHeight);
+		gridViewparams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 		uiCameraGridView.setLayoutParams(gridViewparams);
 		uiCameraGridView.init(
 			mPhotoHeight,
