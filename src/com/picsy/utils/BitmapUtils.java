@@ -19,6 +19,7 @@ public class BitmapUtils {
 	public static Bitmap cropBitmap(Bitmap bitmap, int yCrop, int heightCrop, int rotation) {
 		Matrix matrix = new Matrix();
 		matrix.postRotate(rotation);
+		// TODO: Only the front camera should flip the scale
 		matrix.setScale(-1, 1);
 		
 		Bitmap newBitmap = Bitmap.createBitmap(
@@ -84,5 +85,23 @@ public class BitmapUtils {
 			matrix, 
 			false
 		);
+	}
+	
+	/**
+	 * Reduce the provided bitmap by the provided percentage value
+	 * @param	percentage	The percentage to reduce by
+	 * @param	srcBitmap	The source bitmap
+	 * @return	A bitmap reduced by the provided percentage
+	 */
+	public static Bitmap scaleBitmap(int percentage, int originWidth, int originHeight, Bitmap srcBitmap, boolean increase) {
+		// subtract the proposed percentage from 100 percent
+		percentage = 100 - percentage;
+		int newWidth = 0;
+		int newHeight = 0;
+
+		newWidth = originWidth - (originWidth * percentage / 100);
+		newHeight = originHeight - (originHeight * percentage / 100);
+			
+		return Bitmap.createScaledBitmap(srcBitmap, newWidth, newHeight, false);
 	}
 }

@@ -38,6 +38,21 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="rotate"/>
+		
+		<Button
+		    android:id="@+id/activity_edit_done"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="done"/>
+		
+		<SeekBar 
+		    android:id="@+id/activity_edit_scale"
+		    android:layout_width="0dp"
+		    android:layout_weight="1"
+		    android:layout_height="wrap_content"
+		    android:layout_marginRight="@dimen/padding_medium"
+		    android:max="100"
+		    android:progress="100"/>
         
     </LinearLayout>
 

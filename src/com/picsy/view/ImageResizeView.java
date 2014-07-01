@@ -29,10 +29,6 @@ public class ImageResizeView extends FrameLayout implements OnTouchListener {
 	private int mMinWidth;
 	private int mMinHeight;
 	
-	private static final int DIRECTION_TOP_LEFT = 0x0;
-	private static final int DIRECTION_TOP_RIGHT = 0x1;
-	private static final int DIRECTION_BOTTOM_RIGHT = 0x2;
-	private static final int DIRECTION_BOTTOM_LEFT = 0x3;
 	private static final int INVALID_POINTER_ID = 1785443198;
 	
 	public ImageResizeView(Context context) {
