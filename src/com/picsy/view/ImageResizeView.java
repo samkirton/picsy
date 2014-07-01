@@ -72,6 +72,10 @@ public class ImageResizeView extends FrameLayout implements OnTouchListener {
 		mMinWidth = minWidth;
 		mMinHeight = minHeight;
 		
+		FrameLayout.LayoutParams resizeParams = new FrameLayout.LayoutParams(minWidth, minHeight);
+		resizeParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		uiResizeContainer.setLayoutParams(resizeParams);
+		
 		FrameLayout.LayoutParams gridViewParams = new FrameLayout.LayoutParams(containerWidth, containerWidth);
 		gridViewParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 		uiCameraGridView.setLayoutParams(gridViewParams);
