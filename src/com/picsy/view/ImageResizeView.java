@@ -3,6 +3,7 @@ package com.picsy.view;
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +20,7 @@ public class ImageResizeView extends FrameLayout implements OnTouchListener {
 	private View uiTopRightPoint;
 	private View uiBottomRightPoint;
 	private View uiBottomLeftPoint;
+	private CameraGridView uiCameraGridView;
 	private FrameLayout uiResizeContainer;
 	
 	private float mLastTouchX;
@@ -49,6 +51,7 @@ public class ImageResizeView extends FrameLayout implements OnTouchListener {
 		uiTopRightPoint = findViewById(R.id.view_image_resize_top_right);
 		uiBottomRightPoint = findViewById(R.id.view_image_resize_bottom_right);
 		uiBottomLeftPoint = findViewById(R.id.view_image_resize_bottom_left);
+		uiCameraGridView = (CameraGridView)findViewById(R.id.view_image_cameragridView);
 		uiResizeContainer = (FrameLayout)findViewById(R.id.view_image_resize_container);
 		
 		uiTopLeftPoint.setOnTouchListener(this);
@@ -63,11 +66,22 @@ public class ImageResizeView extends FrameLayout implements OnTouchListener {
 	 * @param 	maxWidth	The maximum resize width
 	 * @param	maxHeight	The maximum resize height
 	 */
-	public void init(int maxWidth, int maxHeight, int minWidth, int minHeight) {
+	public void init(int maxWidth, int maxHeight, int minWidth, int minHeight, int containerWidth) {
 		mMaxWidth = maxWidth;
 		mMaxHeight = maxHeight;
 		mMinWidth = minWidth;
 		mMinHeight = minHeight;
+		
+		FrameLayout.LayoutParams gridViewParams = new FrameLayout.LayoutParams(containerWidth, containerWidth);
+		gridViewParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		uiCameraGridView.setLayoutParams(gridViewParams);
+		
+		uiCameraGridView.init(
+			containerWidth,
+			containerWidth,
+			containerWidth/3, 
+			containerWidth/3
+		);
 	}
 	
 	private void resizeLayout(int x, int y, View v) {

@@ -2,23 +2,24 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FF0000">
+    android:background="@color/activity_camera_header_background">
+    
+    <FrameLayout
+        android:id="@+id/activity_edit_image_area_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/activity_camera_controls_background"/>
     
     <ImageView
-        android:id="@+id/activity_edit_imageview"
+        android:id="@+id/activity_image_display_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"/>
     
-    <com.picsy.view.CameraGridView
-        android:id="@+id/activity_edit_gridView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    
     <com.picsy.view.ImageResizeView 
         android:id="@+id/activity_edit_imageresizeview"
-		android:layout_width="150dp"
-        android:layout_height="150dp"
+		android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"/>
     
     <ProgressBar
@@ -50,7 +51,7 @@
 		    android:layout_width="0dp"
 		    android:layout_weight="1"
 		    android:layout_height="wrap_content"
-		    android:layout_marginRight="@dimen/padding_medium"
+		    android:layout_marginRight="@dimen/padding_large"
 		    android:max="100"
 		    android:progress="100"/>
         

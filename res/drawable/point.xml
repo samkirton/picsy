@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     
-    <size 
-        android:width="@dimen/view_image_resize_point_width"
-        android:height="@dimen/view_image_resize_point_width"/>
-    
-	<solid android:color="@color/view_image_resize_point_background"/>
-    
-</shape>
+    <item>
+		<shape android:shape="rectangle">
+		    
+		    <size 
+		        android:width="5dp"
+		        android:height="@dimen/view_image_resize_point_width"/>
+		    
+			<solid android:color="@color/view_image_resize_point_background"/>
+		    
+		</shape>
+	</item>
+
+</layer-list>

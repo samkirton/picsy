@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -26,7 +25,6 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import com.picsy.R;
 import com.picsy.utils.BitmapUtils;
 import com.picsy.utils.ContentUtils;
-import com.picsy.view.CameraGridView;
 import com.picsy.view.ImageResizeView;
 
 /**
@@ -34,9 +32,9 @@ import com.picsy.view.ImageResizeView;
  */
 public class EditActivity extends Activity implements OnClickListener, OnSeekBarChangeListener {
 	private ImageView uiImageDisplayView;
-	private CameraGridView uiCameraGridView;
 	private ProgressBar uiProgressBar;
 	private ImageResizeView uiImageResizeView;
+	private FrameLayout uiImageAreaBackground;
 	private Button uiRotateButton;
 	private Button uiDoneButton;
 	private SeekBar uiScaleSeekBar;
@@ -107,10 +105,10 @@ public class EditActivity extends Activity implements OnClickListener, OnSeekBar
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit);
 		
-		uiImageDisplayView = (ImageView)findViewById(R.id.activity_edit_imageview);
-		uiCameraGridView = (CameraGridView)findViewById(R.id.activity_edit_gridView);
+		uiImageDisplayView = (ImageView)findViewById(R.id.activity_image_display_view);
 		uiProgressBar = (ProgressBar)findViewById(R.id.activity_edit_progressbar);
 		uiImageResizeView = (ImageResizeView)findViewById(R.id.activity_edit_imageresizeview);
+		uiImageAreaBackground = (FrameLayout)findViewById(R.id.activity_edit_image_area_background);
 		uiRotateButton = (Button)findViewById(R.id.activity_edit_rotate);
 		uiDoneButton = (Button)findViewById(R.id.activity_edit_done);
 		uiScaleSeekBar = (SeekBar)findViewById(R.id.activity_edit_scale);
@@ -142,21 +140,15 @@ public class EditActivity extends Activity implements OnClickListener, OnSeekBar
 	private void showImage(Bitmap image) {
 		uiImageDisplayView.setImageBitmap(image);
 		uiProgressBar.setVisibility(View.GONE);
-		
-		FrameLayout.LayoutParams gridViewParams = new FrameLayout.LayoutParams(mPhotoHeight, mPhotoHeight);
-		gridViewParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
-		uiCameraGridView.setLayoutParams(gridViewParams);
-		uiCameraGridView.init(
-			mPhotoHeight,
-			mPhotoHeight,
-			mPhotoHeight/3, 
-			mPhotoHeight/3
-		);
-		
-		FrameLayout.LayoutParams imageResizeParams = new FrameLayout.LayoutParams(1080, 318);
+				
+		FrameLayout.LayoutParams imageResizeParams = new FrameLayout.LayoutParams(mPhotoHeight, mPhotoHeight);
 		imageResizeParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 		uiImageResizeView.setLayoutParams(imageResizeParams);
-		uiImageResizeView.init(1080, 318, 318, 318);
+		uiImageResizeView.init(1080, 318, 318, 318,mPhotoHeight);
+		
+		FrameLayout.LayoutParams imageAreaLayoutParams = new FrameLayout.LayoutParams(mPhotoHeight, mPhotoHeight);
+		imageAreaLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
+		uiImageAreaBackground.setLayoutParams(imageAreaLayoutParams);
 	}
 	
 	/**
