@@ -45,6 +45,10 @@ public class EditActivity extends Activity implements OnClickListener, OnSeekBar
 	private String mPhotoUri;
 	private int mPhotoYCrop;
 	private int mPhotoHeightCrop;
+	private int mMaxWidth;
+	private int mMaxHeight;
+	private int mMinWidth;
+	private int mMinHeight;
 	private Uri mUri;
 	private String mRealPath;
 	private int mPreviousProgress = 100;
@@ -66,6 +70,10 @@ public class EditActivity extends Activity implements OnClickListener, OnSeekBar
 			mPhotoUri = intent.getStringExtra(EXTRA_PHOTO_URI);
 			mPhotoYCrop = intent.getIntExtra(EXTRA_PHOTO_Y_CROP,-1);
 			mPhotoHeightCrop = intent.getIntExtra(EXTRA_PHOTO_HEIGHT_CROP,-1);
+			mMaxWidth = intent.getIntExtra(EXTRA_MAX_WIDTH,-1);
+			mMaxHeight = intent.getIntExtra(EXTRA_MAX_HEIGHT,-1);
+			mMinWidth = intent.getIntExtra(EXTRA_MIN_WIDTH,-1);
+			mMinHeight = intent.getIntExtra(EXTRA_MIN_HEIGHT,-1);
 			
 			mUri = Uri.parse(mPhotoUri);
 			mRealPath = ContentUtils.getRealPathFromURI(mUri, mContext);
@@ -144,7 +152,7 @@ public class EditActivity extends Activity implements OnClickListener, OnSeekBar
 		FrameLayout.LayoutParams imageResizeParams = new FrameLayout.LayoutParams(mPhotoHeight, mPhotoHeight);
 		imageResizeParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 		uiImageResizeView.setLayoutParams(imageResizeParams);
-		uiImageResizeView.init(1080, 318, 318, 318,mPhotoHeight);
+		uiImageResizeView.init(mMaxWidth, mMaxHeight, mMinWidth, mMinHeight, mPhotoHeight);
 		
 		FrameLayout.LayoutParams imageAreaLayoutParams = new FrameLayout.LayoutParams(mPhotoHeight, mPhotoHeight);
 		imageAreaLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;

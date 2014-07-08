@@ -77,11 +77,11 @@ public abstract class BaseCameraActivity extends Activity implements
 	 * The camera should be closed and the data sent back to the consuming activity
 	 * as soon as the photo has been taken
 	 */
-	public static final String EXTRA_CAMERA_IMMEDIATE = "EXTRA_CAMERA_IMMEDIATE";
+	public static final String CAMERA_IMMEDIATE = "CAMERA_IMMEDIATE";
 	/**
 	 * When the photo has been taken the EditActivity should be opened with the photo
 	 */
-	public static final String EXTRA_CAMERA_RESIZE = "EXTRA_CAMERA_RESIZE";
+	public static final String CAMERA_RESIZE = "CAMERA_RESIZE";
 	
 	private static final int CAMERA_STOPPED = 0x1;
 	private static final int CAMERA_OPEN_SUCCESS = 0x2;
@@ -223,13 +223,23 @@ public abstract class BaseCameraActivity extends Activity implements
 	/**
 	 * Handle the photo capture
 	 */
-	private void photoCaptured(String uri) {		
+	private void photoCaptured(String uri) {
+		// get the resize tool max and min values from the intent
+		Intent activityIntent = getIntent();
+		int maxWidth = activityIntent.getIntExtra(EditActivity.EXTRA_MAX_WIDTH,-1);
+		int maxHeight = activityIntent.getIntExtra(EditActivity.EXTRA_MAX_HEIGHT,-1);
+		int minWidth = activityIntent.getIntExtra(EditActivity.EXTRA_MIN_WIDTH,-1);
+		int minHeight = activityIntent.getIntExtra(EditActivity.EXTRA_MIN_HEIGHT,-1);
+		
 		Intent intent = new Intent(EditActivity.BROADCAST_PHOTO_CAPTURED);
 		intent.putExtra(EditActivity.EXTRA_PHOTO_URI, uri);
 		intent.putExtra(EditActivity.EXTRA_PHOTO_HEIGHT, mPhotoHeight);
-		
 		intent.putExtra(EditActivity.EXTRA_PHOTO_Y_CROP,mPhotoYCrop);
 		intent.putExtra(EditActivity.EXTRA_PHOTO_HEIGHT_CROP,mPhotoHeightCrop);
+		intent.putExtra(EditActivity.EXTRA_MAX_WIDTH,maxWidth);
+		intent.putExtra(EditActivity.EXTRA_MAX_HEIGHT,maxHeight);
+		intent.putExtra(EditActivity.EXTRA_MIN_WIDTH,minWidth);
+		intent.putExtra(EditActivity.EXTRA_MIN_HEIGHT,minHeight);
 		
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
@@ -422,13 +432,15 @@ public abstract class BaseCameraActivity extends Activity implements
 
 	@Override
 	public void onPictureTaken(final byte[] data, Camera camera) {
-		if (mCameraResponseType.equals(EXTRA_CAMERA_IMMEDIATE)) {
+		if (mCameraResponseType.equals(CAMERA_IMMEDIATE)) {
 			Intent intent = new Intent();
 			setResult(EXTRA_CAMERA_RESULT_CODE, intent);
-		} else if (mCameraResponseType.equals(EXTRA_CAMERA_RESIZE)) {
+		} else if (mCameraResponseType.equals(CAMERA_RESIZE)) {
 			mPhotoData = data;
 			new ResizeImageThread().start();
 			
+			// move to the EditActivity immediately and receive the resize broadcast 
+			// receiver result after the image has been resized
 			Intent intent = new Intent(this, EditActivity.class);
 			intent.putExtra(EditActivity.EXTRA_PHOTO_HEIGHT, mPhotoHeight);
 			startActivity(intent);

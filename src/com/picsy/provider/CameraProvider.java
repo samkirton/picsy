@@ -17,9 +17,7 @@ public class CameraProvider {
 	    
 	    try {	    	
 	        camera = Camera.open(cameraType); 
-	    } catch (Exception e) { 
-	    	System.out.println("TEST");
-	    }
+	    } catch (Exception e) {}
 	    
 	    return camera; 
 	}
