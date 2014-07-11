@@ -176,7 +176,7 @@ public abstract class BaseCameraActivity extends Activity implements
 			uiCameraPreviewSurfaceView.getHolder().addCallback(this);
 			
 			// load animations
-			mCaptureAnimation = AnimationUtils.loadAnimation(this, R.anim.camera_photo_taken);
+			mCaptureAnimation = AnimationUtils.loadAnimation(this, R.anim.com_picsy_camera_photo_taken);
 		} else {
 			// TODO: Handle camera error
 		}

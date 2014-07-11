@@ -24,17 +24,17 @@ public class CameraActivity extends BaseCameraActivity implements OnClickListene
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		setContentView(R.layout.activity_camera);
+		setContentView(R.layout.com_picsy_activity_camera);
 		super.onCreate(savedInstanceState);
-		uiShowHideGridButton = (ImageView)findViewById(R.id.activity_camera_show_hide_grid_imageview);
-		uiReverseCameraButton = (ImageView)findViewById(R.id.activity_camera_switch);
-		uiFlashToggleView = (ToggleView)findViewById(R.id.activity_camera_flash_toggleview);
-		uiCaptureButton = (ImageView)findViewById(R.id.activity_camera_capture_imageview);
+		uiShowHideGridButton = (ImageView)findViewById(R.id.com_picsy_activity_camera_show_hide_grid_imageview);
+		uiReverseCameraButton = (ImageView)findViewById(R.id.com_picsy_activity_camera_switch);
+		uiFlashToggleView = (ToggleView)findViewById(R.id.com_picsy_activity_camera_flash_toggleview);
+		uiCaptureButton = (ImageView)findViewById(R.id.com_picsy_activity_camera_capture_imageview);
 		
 		LinkedHashMap<Integer, String> flashDrawableKeyHashMap = new LinkedHashMap<Integer, String>();
-		flashDrawableKeyHashMap.put(R.drawable.activity_camera_flash_off, BaseCameraActivity.PARAM_FLASH_OFF);
-		flashDrawableKeyHashMap.put(R.drawable.activity_camera_flash_on, BaseCameraActivity.PARAM_FLASH_ON);
-		flashDrawableKeyHashMap.put(R.drawable.activity_camera_flash_auto, BaseCameraActivity.PARAM_FLASH_AUTO);
+		flashDrawableKeyHashMap.put(R.drawable.com_picsy_activity_camera_flash_off, BaseCameraActivity.PARAM_FLASH_OFF);
+		flashDrawableKeyHashMap.put(R.drawable.com_picsy_activity_camera_flash_on, BaseCameraActivity.PARAM_FLASH_ON);
+		flashDrawableKeyHashMap.put(R.drawable.com_picsy_activity_camera_flash_auto, BaseCameraActivity.PARAM_FLASH_AUTO);
 		
 		uiFlashToggleView.build(flashDrawableKeyHashMap);
 		
@@ -46,17 +46,17 @@ public class CameraActivity extends BaseCameraActivity implements OnClickListene
 	
 	@Override
 	protected FrameLayout getHeaderFrameLayout() {
-		return (FrameLayout)findViewById(R.id.activity_camera_header_layout);
+		return (FrameLayout)findViewById(R.id.com_picsy_activity_camera_header_layout);
 	}
 
 	@Override
 	protected FrameLayout getControlsFrameLayout() {
-		return (FrameLayout)findViewById(R.id.activity_camera_controls_layout);
+		return (FrameLayout)findViewById(R.id.com_picsy_activity_camera_controls_layout);
 	}
 
 	@Override
 	protected PreviewSurfaceView getPreviewSurfaceView() {
-		return (PreviewSurfaceView)findViewById(R.id.activity_camera_preview_surface_view);
+		return (PreviewSurfaceView)findViewById(R.id.com_picsy_activity_camera_preview_surface_view);
 	}
 	
 	@Override

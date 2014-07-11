@@ -111,15 +111,15 @@ public class EditActivity extends Activity implements OnClickListener, OnSeekBar
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_edit);
+		setContentView(R.layout.com_picsy_activity_edit);
 		
-		uiImageDisplayView = (ImageView)findViewById(R.id.activity_image_display_view);
-		uiProgressBar = (ProgressBar)findViewById(R.id.activity_edit_progressbar);
-		uiImageResizeView = (ImageResizeView)findViewById(R.id.activity_edit_imageresizeview);
-		uiImageAreaBackground = (FrameLayout)findViewById(R.id.activity_edit_image_area_background);
-		uiRotateButton = (Button)findViewById(R.id.activity_edit_rotate);
-		uiDoneButton = (Button)findViewById(R.id.activity_edit_done);
-		uiScaleSeekBar = (SeekBar)findViewById(R.id.activity_edit_scale);
+		uiImageDisplayView = (ImageView)findViewById(R.id.com_picsy_activity_image_display_view);
+		uiProgressBar = (ProgressBar)findViewById(R.id.com_picsy_activity_edit_progressbar);
+		uiImageResizeView = (ImageResizeView)findViewById(R.id.com_picsy_activity_edit_imageresizeview);
+		uiImageAreaBackground = (FrameLayout)findViewById(R.id.com_picsy_activity_edit_image_area_background);
+		uiRotateButton = (Button)findViewById(R.id.com_picsy_activity_edit_rotate);
+		uiDoneButton = (Button)findViewById(R.id.com_picsy_activity_edit_done);
+		uiScaleSeekBar = (SeekBar)findViewById(R.id.com_picsy_activity_edit_scale);
 		
 		uiRotateButton.setOnClickListener(this);
 		uiScaleSeekBar.setOnSeekBarChangeListener(this);

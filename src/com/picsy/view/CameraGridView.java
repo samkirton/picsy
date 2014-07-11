@@ -36,7 +36,7 @@ public class CameraGridView extends View {
 	 */
 	private void setStyle() {
 		mLinePaint = new Paint();
-		mLinePaint.setColor(getResources().getColor(R.color.view_camera_grid_border));
+		mLinePaint.setColor(getResources().getColor(R.color.com_picsy_view_camera_grid_border));
 		mLinePaint.setStrokeWidth(HAIRLINE);
 		mLinePaint.setStyle(Paint.Style.FILL);
 	}

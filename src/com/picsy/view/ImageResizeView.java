@@ -11,6 +11,7 @@ import android.view.View.OnTouchListener;
 import android.widget.FrameLayout;
 
 import com.picsy.R;
+import com.picsy.model.CropResult;
 
 /**
  * @author samuelkirton
@@ -45,14 +46,14 @@ public class ImageResizeView extends FrameLayout implements OnTouchListener {
 	
 	private void setup() {
 		LayoutInflater inflater = LayoutInflater.from(getContext());
-		inflater.inflate(R.layout.view_image_resize, this, true);
+		inflater.inflate(R.layout.com_picsy_view_image_resize, this, true);
 		
-		uiTopLeftPoint = findViewById(R.id.view_image_resize_top_left);
-		uiTopRightPoint = findViewById(R.id.view_image_resize_top_right);
-		uiBottomRightPoint = findViewById(R.id.view_image_resize_bottom_right);
-		uiBottomLeftPoint = findViewById(R.id.view_image_resize_bottom_left);
-		uiCameraGridView = (CameraGridView)findViewById(R.id.view_image_cameragridView);
-		uiResizeContainer = (FrameLayout)findViewById(R.id.view_image_resize_container);
+		uiTopLeftPoint = findViewById(R.id.com_picsy_view_image_resize_top_left);
+		uiTopRightPoint = findViewById(R.id.com_picsy_view_image_resize_top_right);
+		uiBottomRightPoint = findViewById(R.id.com_picsy_view_image_resize_bottom_right);
+		uiBottomLeftPoint = findViewById(R.id.com_picsy_view_image_resize_bottom_left);
+		uiCameraGridView = (CameraGridView)findViewById(R.id.com_picsy_view_image_cameragridView);
+		uiResizeContainer = (FrameLayout)findViewById(R.id.com_picsy_view_image_resize_container);
 		
 		uiTopLeftPoint.setOnTouchListener(this);
 		uiTopRightPoint.setOnTouchListener(this);
@@ -86,6 +87,18 @@ public class ImageResizeView extends FrameLayout implements OnTouchListener {
 			containerWidth/3, 
 			containerWidth/3
 		);
+	}
+	
+	/**
+	 * @return	The dimensions of the crop result
+	 */
+	public CropResult crop() {
+		CropResult cropResult = new CropResult();
+		cropResult.setX(uiResizeContainer.getLeft());
+		cropResult.setY(uiResizeContainer.getTop());
+		cropResult.setWidth(uiResizeContainer.getWidth());
+		cropResult.setHeight(uiResizeContainer.getHeight());
+		return cropResult;
 	}
 	
 	private void resizeLayout(int x, int y, View v) {
@@ -154,7 +167,7 @@ public class ImageResizeView extends FrameLayout implements OnTouchListener {
 			    // Remember this touch position for the next move event
 			    mLastTouchX = x;
 			    mLastTouchY = y;
-			    
+		    
 			    resizeLayout((int)dx,(int)dy,v);
 			    break;
 			            

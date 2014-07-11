@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    
+    <size 
+        android:width="@dimen/com_picsy_view_image_resize_point_width"
+        android:height="@dimen/com_picsy_view_image_resize_point_width"/>
+    
+	<solid android:color="@color/com_picsy_view_image_resize_point_background"/>
+    
+</shape>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+        
+    <com.picsy.view.CameraGridView
+        android:id="@+id/com_picsy_view_image_cameragridView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    
+    <FrameLayout
+        android:id="@+id/com_picsy_view_image_resize_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/border">
+
+	    <View
+	        android:id="@+id/com_picsy_view_image_resize_top_left"
+	        android:layout_width="@dimen/com_picsy_view_image_resize_point_width"
+	        android:layout_height="@dimen/com_picsy_view_image_resize_point_width"
+	        android:layout_gravity="left|top"
+	        android:background="@drawable/com_picsy_point"
+	        android:padding="@dimen/com_picsy_view_image_resize_point_padding"/>
+	    
+		<View
+		    android:id="@+id/com_picsy_view_image_resize_bottom_left"
+	        android:layout_width="@dimen/com_picsy_view_image_resize_point_width"
+	        android:layout_height="@dimen/com_picsy_view_image_resize_point_width"
+	        android:layout_gravity="left|bottom"
+	        android:background="@drawable/com_picsy_point"
+	        android:padding="@dimen/com_picsy_view_image_resize_point_padding"/>
+		
+		<View
+		    android:id="@+id/com_picsy_view_image_resize_top_right"
+	        android:layout_width="@dimen/com_picsy_view_image_resize_point_width"
+	        android:layout_height="@dimen/com_picsy_view_image_resize_point_width"
+	        android:layout_gravity="right|top"
+	        android:background="@drawable/com_picsy_point"
+	        android:padding="@dimen/com_picsy_view_image_resize_point_padding"/>
+		
+		<View
+		    android:id="@+id/com_picsy_view_image_resize_bottom_right"
+	        android:layout_width="@dimen/com_picsy_view_image_resize_point_width"
+	        android:layout_height="@dimen/com_picsy_view_image_resize_point_width"
+	        android:layout_gravity="right|bottom"
+	        android:background="@drawable/com_picsy_point"
+	        android:padding="@dimen/com_picsy_view_image_resize_point_padding"/>
+
+	</FrameLayout>
+	
+</FrameLayout>

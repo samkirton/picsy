@@ -4,6 +4,6 @@
     
 	<stroke 
 	    android:width="3dp" 
-	    android:color="@color/view_image_resize_border"/>
+	    android:color="@color/com_picsy_view_image_resize_border"/>
 	
 </shape>
