@@ -14,7 +14,7 @@
 	    android:id="@+id/com_picsy_activity_camera_capture_animation_layout"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-	    android:background="@color/activity_camera_flash_background"
+	    android:background="@color/com_picsy_activity_camera_flash_background"
 	    android:visibility="gone"/>
 	
 	<FrameLayout
