@@ -1,1 +1,0 @@
-# picsy photo capture #
