@@ -73,7 +73,7 @@ public class CameraHolder implements PictureCallback {
     private void linkCameraWithSurfaceView(Camera camera, PreviewView previewView, Display display, int cameraType) {
         if (camera != null) {
             mCamera = camera;
-            mCameraProvider.setDefaultParameters(camera, PICTURE_QUALITY, mContext);
+            mCameraProvider.setDefaultParameters(camera, cameraType, PICTURE_QUALITY, mContext);
             mCameraProvider.setOrientation(display, camera, cameraType);
             previewView.start(camera, cameraType, mCameraProvider);
             mCurrentCamera = cameraType;
@@ -137,6 +137,6 @@ public class CameraHolder implements PictureCallback {
 
     @Override
     public void onPictureTaken(byte[] data, Camera camera) {
-        new CameraCaptureThread(mCameraHandler,data,mContext).start();
+        new CameraCaptureThread(mCameraHandler,data,mCurrentCamera,mContext).start();
     }
 }

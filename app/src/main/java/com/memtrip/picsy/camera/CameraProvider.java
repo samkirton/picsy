@@ -1,15 +1,18 @@
 package com.memtrip.picsy.camera;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
+import android.hardware.Camera.Size;
 import android.view.Display;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import com.memtrip.picsy.utils.CameraUtils;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Camera instance methods
@@ -110,10 +113,24 @@ public class CameraProvider {
      * @param   pictureQuality  The quality of the camera photo capture
      * @param   context The application context
      */
-    public void setDefaultParameters(Camera camera, int pictureQuality, Context context) {
+    public void setDefaultParameters(Camera camera, int cameraType, int pictureQuality, Context context) {
         Camera.Parameters cameraParameters = camera.getParameters();;
         cameraParameters.setPictureFormat(ImageFormat.JPEG);
         cameraParameters.setJpegQuality(pictureQuality);
+
+        // use the best quality camera
+        List<Size> sizes = cameraParameters.getSupportedPictureSizes();
+        Camera.Size size = sizes.get(0);
+        for(int i = 0; i < sizes.size(); i++) {
+            if(sizes.get(i).width > size.width)
+                size = sizes.get(i);
+        }
+        cameraParameters.setPictureSize(size.width, size.height);
+
+        // update the rotation of the image
+        Camera.Parameters params = camera.getParameters();
+        params.setRotation(CameraUtils.getCameraRotation(cameraType,context));
+        camera.setParameters(params);
 
         // enabled continuous focus if it is available
         if (CameraUtils.isAutoFocusContinousPictureSupported(cameraParameters, context)) {

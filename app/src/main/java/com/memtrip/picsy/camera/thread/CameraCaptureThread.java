@@ -1,6 +1,5 @@
 package com.memtrip.picsy.camera.thread;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,7 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.memtrip.picsy.camera.CameraHolder;
-import com.memtrip.picsy.camera.CameraProvider;
+import com.memtrip.picsy.utils.BitmapUtils;
 import com.memtrip.picsy.utils.CapturePhotoUtils;
 
 /**
@@ -18,11 +17,13 @@ import com.memtrip.picsy.utils.CapturePhotoUtils;
 public class CameraCaptureThread extends Thread {
     private Handler mCameraHolderHandler;
     private byte[] mPhotoData;
+    private int mCameraType;
     private Context mContext;
 
-    public CameraCaptureThread(Handler handler, byte[] photoData, Context context) {
+    public CameraCaptureThread(Handler handler, byte[] photoData, int cameraType, Context context) {
         mCameraHolderHandler = handler;
         mPhotoData = photoData;
+        mCameraType = cameraType;
         mContext = context;
     }
 
@@ -33,6 +34,9 @@ public class CameraCaptureThread extends Thread {
             0,
             mPhotoData.length
         );
+
+        boolean shouldFlip = (mCameraType == Camera.CameraInfo.CAMERA_FACING_FRONT);
+        bitmap = BitmapUtils.cropBitmap(bitmap,shouldFlip);
 
         String uri = CapturePhotoUtils.insertImage(
             mContext.getContentResolver(),

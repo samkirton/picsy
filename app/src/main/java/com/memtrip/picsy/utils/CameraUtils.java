@@ -1,9 +1,11 @@
 package com.memtrip.picsy.utils;
 
+import android.app.Activity;
 import android.content.Context;
 
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.view.Surface;
 
 import java.util.List;
 
@@ -52,6 +54,25 @@ public class CameraUtils {
             param.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
             camera.setParameters(param);
         }
+    }
+
+    /**
+     * Get the camera rotation
+     * @param   context The context to get the activity instance for
+     * @return  The rotation degrees required
+     */
+    public static int getCameraRotation(int cameraType, Context context) {
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        Camera.getCameraInfo(cameraType, info);
+        int rotation = ((Activity)context).getWindowManager().getDefaultDisplay().getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0: degrees = 0; break; //Natural orientation
+            case Surface.ROTATION_90: degrees = 90; break; //Landscape left
+            case Surface.ROTATION_180: degrees = 180; break;//Upside down
+            case Surface.ROTATION_270: degrees = 270; break;//Landscape right
+        }
+        return (info.orientation - degrees + 360) % 360;
     }
 
     /**
