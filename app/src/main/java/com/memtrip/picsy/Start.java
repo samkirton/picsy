@@ -1,6 +1,8 @@
 package com.memtrip.picsy;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.os.Bundle;
 
@@ -10,9 +12,9 @@ import com.memtrip.picsy.view.ControlView;
 import com.memtrip.picsy.view.PreviewView;
 
 /**
- * Demo camera activity
+ * Demo usage
  */
-public class Start extends Activity  {
+public class Start extends Activity implements CameraHolder.OnPhotoCaptured {
     private PreviewView uiPreviewView;
     private ControlView uiControlView;
 
@@ -27,6 +29,7 @@ public class Start extends Activity  {
         uiControlView = (ControlView)findViewById(R.id.start_control);
 
         mCameraHolder = new CameraHolder(this, new CameraProvider(), uiPreviewView,getWindowManager().getDefaultDisplay());
+        mCameraHolder.setOnPhotoCaptured(this);
         mCameraHolder.start(Camera.CameraInfo.CAMERA_FACING_BACK);
         uiControlView.setCameraHolder(mCameraHolder);
     }
@@ -41,5 +44,12 @@ public class Start extends Activity  {
     protected void onResume() {
         super.onResume();
         mCameraHolder.start();
+    }
+
+    @Override
+    public void onPhotoCaptured(Bitmap bitmap, String uri) {
+        Intent intent = new Intent(this,Start.class);
+        startActivity(intent);
+        System.out.println("TEST");
     }
 }

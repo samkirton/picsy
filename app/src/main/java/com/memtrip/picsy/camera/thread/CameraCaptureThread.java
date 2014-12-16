@@ -49,7 +49,23 @@ public class CameraCaptureThread extends Thread {
 
         Message msg = new Message();
         msg.what = CameraHolder.CAMERA_PHOTO_CAPTURE;
-        msg.obj = uri;
+        msg.obj = new Response(bitmap,uri);
         mCameraHolderHandler.sendMessage(msg);
+    }
+
+    public class Response {
+        private String uri;
+        private Bitmap bitmap;
+
+        public Response(Bitmap bitmap,String uri) {
+            this.bitmap = bitmap;
+            this.uri = uri;
+        }
+
+        public String getUri() {
+            return uri;
+        }
+
+        public Bitmap getBitmap() { return bitmap; }
     }
 }

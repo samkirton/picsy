@@ -1,6 +1,5 @@
 package com.memtrip.picsy.camera;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
@@ -18,6 +17,9 @@ import java.util.List;
  * Camera instance methods
  */
 public class CameraProvider {
+    private static final int OPTIMAL_WIDTH = 1280;
+    private static final int OPTIMAL_HEIGHT = 768;
+
     /**
      * @param   context The context used to retrieve the package manager
      * @return  Does the device have a camera?
@@ -121,9 +123,13 @@ public class CameraProvider {
         // use the best quality camera
         List<Size> sizes = cameraParameters.getSupportedPictureSizes();
         Camera.Size size = sizes.get(0);
-        for(int i = 0; i < sizes.size(); i++) {
-            if(sizes.get(i).width > size.width)
+        for (int i = 0; i < sizes.size(); i++) {
+            if (sizes.get(i).width == OPTIMAL_WIDTH && sizes.get(i).height == OPTIMAL_HEIGHT) {
                 size = sizes.get(i);
+                break;
+            } else if (sizes.get(i).width > size.width) {
+                size = sizes.get(i);
+            }
         }
         cameraParameters.setPictureSize(size.width, size.height);
 

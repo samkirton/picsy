@@ -1,6 +1,7 @@
 package com.memtrip.picsy.camera;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.os.Message;
@@ -24,11 +25,20 @@ public class CameraHolder implements PictureCallback {
     private PreviewView uiPreviewView;
     private Display mDisplay;
     private int mCurrentCamera;
+    private OnPhotoCaptured mOnPhotoCaptured;
 
     private static final int PICTURE_QUALITY = 100;
     public static final int CAMERA_OPEN = 0x1;
     public static final int CAMERA_PHOTO_CAPTURE = 0x2;
     public static final int CAMERA_REVERSE = 0x3;
+
+    public interface OnPhotoCaptured {
+        public void onPhotoCaptured(Bitmap bitmap, String uri);
+    }
+
+    public void setOnPhotoCaptured(OnPhotoCaptured newVal) {
+        mOnPhotoCaptured = newVal;
+    }
 
     public CameraHolder(Context context, CameraProvider cameraProvider, PreviewView previewView, Display display) {
         mContext = context;
@@ -57,7 +67,8 @@ public class CameraHolder implements PictureCallback {
                     break;
 
                 case CAMERA_PHOTO_CAPTURE:
-                    // move screen
+                    CameraCaptureThread.Response captureResponse = (CameraCaptureThread.Response)msg.obj;
+                    mOnPhotoCaptured.onPhotoCaptured(captureResponse.getBitmap(),captureResponse.getUri());
                     break;
             }
         }
