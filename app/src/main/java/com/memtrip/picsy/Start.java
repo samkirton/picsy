@@ -50,6 +50,6 @@ public class Start extends Activity implements CameraHolder.OnPhotoCaptured {
     public void onPhotoCaptured(Bitmap bitmap, String uri) {
         Intent intent = new Intent(this,Start.class);
         startActivity(intent);
-        System.out.println("TEST");
+        // return the intent
     }
 }

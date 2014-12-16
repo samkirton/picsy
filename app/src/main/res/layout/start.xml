@@ -13,6 +13,6 @@
     <com.memtrip.picsy.view.ControlView
         android:id="@+id/start_control"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

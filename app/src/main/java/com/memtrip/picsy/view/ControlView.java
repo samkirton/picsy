@@ -2,6 +2,7 @@ package com.memtrip.picsy.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Display;
 import android.view.Gravity;
@@ -17,6 +18,7 @@ import com.memtrip.picsy.R;
 import com.memtrip.picsy.camera.CameraHolder;
 import com.memtrip.picsy.utils.CameraUtils;
 import com.memtrip.picsy.utils.DisplayUtils;
+import com.memtrip.picsy.utils.ViewUtils;
 
 import java.util.LinkedHashMap;
 
@@ -24,12 +26,13 @@ import java.util.LinkedHashMap;
  * UI components for managing the state of the camera
  */
 public class ControlView extends FrameLayout implements View.OnClickListener, ToggleView.OnToggleSwitch, Animation.AnimationListener {
-    private FrameLayout uiControlFrameLayout;
+    private FrameLayout uiControlTabTrayLayout;
     private FrameLayout uiSwitchAnimationLayout;
     private GridView uiGridView;
     private ImageView uiSelectGridImageView;
     private ImageView uiSwitchImageView;
     private ToggleView uiFlashToggleView;
+    private FrameLayout uiCaptureLayout;
     private ImageView uiCaptureImageView;
     private Animation uiSwitchAnimation;
 
@@ -39,36 +42,32 @@ public class ControlView extends FrameLayout implements View.OnClickListener, To
 
     private static final int ANIMATION_WAIT = 1000;
 
-    public ControlView(Context context) {
-        super(context);
-        init(context);
-    }
-
     public ControlView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init(context,attrs);
     }
 
     public ControlView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init(context,attrs);
     }
 
     public void setCameraHolder(CameraHolder cameraHolder) {
         mCameraHolder = cameraHolder;
     }
 
-    private void init(Context context) {
+    private void init(Context context, AttributeSet attrs) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         layoutInflater.inflate(R.layout.com_picsy_view_controls,this);
 
-        uiSwitchAnimationLayout = (FrameLayout)findViewById(R.id.com_picsy_activity_camera_switch_animation_layout);
-        uiGridView = (GridView)findViewById(R.id.com_picsy_activity_camera_grid);
-        uiControlFrameLayout = (FrameLayout)findViewById(R.id.com_picsy_activity_camera_controls_layout);
-        uiSelectGridImageView = (ImageView)findViewById(R.id.com_picsy_activity_camera_show_hide_grid_imageview);
-        uiSwitchImageView = (ImageView)findViewById(R.id.com_picsy_activity_camera_switch);
-        uiFlashToggleView = (ToggleView)findViewById(R.id.com_picsy_activity_camera_flash_toggleview);
-        uiCaptureImageView = (ImageView)findViewById(R.id.com_picsy_activity_camera_capture_imageview);
+        uiSwitchAnimationLayout = (FrameLayout)findViewById(R.id.com_picsy_view_control_switch_animation_layout);
+        uiGridView = (GridView)findViewById(R.id.com_picsy_view_control_grid);
+        uiControlTabTrayLayout = (FrameLayout)findViewById(R.id.com_picsy_view_control_tab_tray_layout);
+        uiSelectGridImageView = (ImageView)findViewById(R.id.com_picsy_view_control_show_hide_grid_imageview);
+        uiSwitchImageView = (ImageView)findViewById(R.id.com_picsy_view_control_switch);
+        uiFlashToggleView = (ToggleView)findViewById(R.id.com_picsy_view_control_flash_toggleview);
+        uiCaptureLayout = (FrameLayout)findViewById(R.id.com_picsy_view_control_capture_layout);
+        uiCaptureImageView = (ImageView)findViewById(R.id.com_picsy_view_control_capture_imageview);
         uiSwitchAnimation = AnimationUtils.loadAnimation(getContext(),R.anim.com_picsy_camera_switch_camera);
 
         uiFlashToggleView.setOnToggleSwitch(this);
@@ -82,8 +81,51 @@ public class ControlView extends FrameLayout implements View.OnClickListener, To
         mDisplayHeight = DisplayUtils.getDisplayHeight(display);
         int height = mDisplayHeight - mDisplayWidth;
 
+        setCaptureBackgroundColor(attrs);
+        setTabTrayBackgroundColor(attrs);
+        setCaptureIcon(attrs);
+
         buildFlashToggleView(uiFlashToggleView);
-        setControlLayoutParams(uiControlFrameLayout,mDisplayWidth,height);
+        setControlLayoutParams(uiControlTabTrayLayout,mDisplayWidth,height);
+    }
+
+    private void setCaptureBackgroundColor(AttributeSet attrs) {
+        int captureBackgroundColor = ViewUtils.getColorFromAttribute(
+            this,
+            attrs,
+            R.styleable.attrs_view_control,
+            R.styleable.attrs_view_control_captureBackgroundColor
+        );
+
+        if (captureBackgroundColor != -1) {
+            uiCaptureLayout.setBackgroundColor(captureBackgroundColor);
+        }
+    }
+
+    private void setTabTrayBackgroundColor(AttributeSet attrs) {
+        int tabTrayColor = ViewUtils.getColorFromAttribute(
+            this,
+            attrs,
+            R.styleable.attrs_view_control,
+            R.styleable.attrs_view_control_tabTrayColor
+        );
+
+        if (tabTrayColor != -1) {
+            uiControlTabTrayLayout.setBackgroundColor(tabTrayColor);
+        }
+    }
+
+    private void setCaptureIcon(AttributeSet attrs) {
+        Drawable drawable = ViewUtils.getDrawableFromAttribute(
+            this,
+            attrs,
+            R.styleable.attrs_view_control,
+            R.styleable.attrs_view_control_captureIcon
+        );
+
+        if (drawable != null) {
+            uiCaptureImageView.setImageDrawable(drawable);
+        }
     }
 
     private void setControlLayoutParams(FrameLayout controlLayout, int width, int height) {
@@ -95,9 +137,9 @@ public class ControlView extends FrameLayout implements View.OnClickListener, To
 
     private void buildFlashToggleView(ToggleView toggleView) {
         LinkedHashMap<Integer, String> flashDrawableKeyHashMap = new LinkedHashMap<Integer, String>();
-        flashDrawableKeyHashMap.put(R.drawable.com_picsy_activity_camera_flash_off, CameraUtils.FLASH_OFF);
-        flashDrawableKeyHashMap.put(R.drawable.com_picsy_activity_camera_flash_on, CameraUtils.FLASH_ON);
-        flashDrawableKeyHashMap.put(R.drawable.com_picsy_activity_camera_flash_auto, CameraUtils.FLASH_AUTO);
+        flashDrawableKeyHashMap.put(R.drawable.com_picsy_view_control_flash_off, CameraUtils.FLASH_OFF);
+        flashDrawableKeyHashMap.put(R.drawable.com_picsy_view_control_flash_on, CameraUtils.FLASH_ON);
+        flashDrawableKeyHashMap.put(R.drawable.com_picsy_view_control_flash_auto, CameraUtils.FLASH_AUTO);
         toggleView.build(flashDrawableKeyHashMap);
     }
 

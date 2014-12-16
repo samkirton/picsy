@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="attrs_view_control">
+        <attr name="tabTrayColor" format="color"/>
+        <attr name="captureBackgroundColor" format="color"/>
+        <attr name="captureIcon" format="reference"/>
+    </declare-styleable>
+</resources>

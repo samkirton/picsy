@@ -120,13 +120,15 @@ public class CameraProvider {
         cameraParameters.setPictureFormat(ImageFormat.JPEG);
         cameraParameters.setJpegQuality(pictureQuality);
 
-        // use the best quality camera
+        // pick the camera resolution
         List<Size> sizes = cameraParameters.getSupportedPictureSizes();
         Camera.Size size = sizes.get(0);
         for (int i = 0; i < sizes.size(); i++) {
+            // choose optimal first
             if (sizes.get(i).width == OPTIMAL_WIDTH && sizes.get(i).height == OPTIMAL_HEIGHT) {
                 size = sizes.get(i);
                 break;
+            // choose the highest resolution second
             } else if (sizes.get(i).width > size.width) {
                 size = sizes.get(i);
             }
