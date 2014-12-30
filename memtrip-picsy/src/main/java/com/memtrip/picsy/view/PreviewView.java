@@ -1,6 +1,9 @@
 package com.memtrip.picsy.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
@@ -14,7 +17,6 @@ import com.memtrip.picsy.camera.CameraProvider;
 public class PreviewView extends SurfaceView implements SurfaceHolder.Callback {
     private Camera mCamera;
     private CameraProvider mCameraProvider;
-    private int mCameraType;
     private SurfaceHolder mHolder;
 
     public PreviewView(Context context) {
@@ -37,9 +39,8 @@ public class PreviewView extends SurfaceView implements SurfaceHolder.Callback {
         mHolder.addCallback(this);
     }
 
-    public void start(Camera camera, int cameraType, CameraProvider cameraProvider) {
+    public void start(Camera camera, CameraProvider cameraProvider) {
         mCamera = camera;
-        mCameraType = cameraType;
         mCameraProvider = cameraProvider;
         mCameraProvider.startPreview(getHolder(), mCamera);
         requestLayout();

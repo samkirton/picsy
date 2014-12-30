@@ -3,6 +3,9 @@ package com.memtrip.picsy.utils;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.CursorLoader;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
@@ -122,5 +125,25 @@ public class CapturePhotoUtils {
 		} catch (IOException ex) {
 			return null;
 		}
+    }
+
+    /**
+    * Get the real path from the provided URI.
+    * NOTE: This will block the UI thread
+    * @param	uri	The URI to get the real path for
+    * @param	context	The application context
+    * @return	The real path based on the provided URI
+    */
+    public static String getRealPathFromURI(Uri uri, Context context) {
+        String realPath = null;
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(uri, filePathColumn, null, null, null);
+        if (cursor.moveToFirst()){
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            realPath = cursor.getString(columnIndex);
+        }
+
+        cursor.close();
+        return realPath;
     }
 }

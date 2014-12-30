@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 
@@ -18,12 +19,14 @@ public class CameraCaptureThread extends Thread {
     private Handler mCameraHolderHandler;
     private byte[] mPhotoData;
     private int mCameraType;
+    private int mDimen;
     private Context mContext;
 
-    public CameraCaptureThread(Handler handler, byte[] photoData, int cameraType, Context context) {
+    public CameraCaptureThread(Handler handler, byte[] photoData, int cameraType, int dimen, Context context) {
         mCameraHolderHandler = handler;
         mPhotoData = photoData;
         mCameraType = cameraType;
+        mDimen = dimen;
         mContext = context;
     }
 
@@ -36,12 +39,13 @@ public class CameraCaptureThread extends Thread {
         );
 
         boolean shouldFlip = (mCameraType == Camera.CameraInfo.CAMERA_FACING_FRONT);
-        bitmap = BitmapUtils.cropBitmap(bitmap,shouldFlip);
+        bitmap = BitmapUtils.cropBitmap(bitmap, 0, shouldFlip);
 
+        String title = "random";
         String uri = CapturePhotoUtils.insertImage(
             mContext.getContentResolver(),
             bitmap,
-            "proffer",
+            title,
             "description"
         );
 
@@ -49,23 +53,7 @@ public class CameraCaptureThread extends Thread {
 
         Message msg = new Message();
         msg.what = CameraHolder.CAMERA_PHOTO_CAPTURE;
-        msg.obj = new Response(bitmap,uri);
+        msg.obj = uri;
         mCameraHolderHandler.sendMessage(msg);
-    }
-
-    public class Response {
-        private String uri;
-        private Bitmap bitmap;
-
-        public Response(Bitmap bitmap,String uri) {
-            this.bitmap = bitmap;
-            this.uri = uri;
-        }
-
-        public String getUri() {
-            return uri;
-        }
-
-        public Bitmap getBitmap() { return bitmap; }
     }
 }

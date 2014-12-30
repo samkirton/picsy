@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.memtrip.picsy.sample.R;
@@ -45,14 +44,18 @@ public class DisplayActivity extends Activity implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == PhotoCaptureActivity.RESULT_CODE) {
             String uri = data.getStringExtra(PhotoCaptureActivity.URI);
-            Uri imageUri = Uri.parse(uri);
-            Bitmap bitmap = null;
 
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-                uiPhotoImageView.setImageDrawable(new BitmapDrawable(getResources(),bitmap));
-                setPhotoLayoutParams();
-            } catch (IOException e) { }
+            if (uri != null) {
+                Uri imageUri = Uri.parse(uri);
+                Bitmap bitmap = null;
+
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                    uiPhotoImageView.setImageDrawable(new BitmapDrawable(getResources(), bitmap));
+                    setPhotoLayoutParams();
+                } catch (IOException e) {
+                }
+            }
         }
     }
 

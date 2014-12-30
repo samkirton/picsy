@@ -63,7 +63,7 @@ public class CameraProvider {
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
             result = (info.orientation + degrees) % 360;
             result = (360 - result) % 360;  // compensate the mirror
-        } else {  // back-facing
+        } else {
             result = (info.orientation - degrees + 360) % 360;
         }
 

@@ -12,6 +12,7 @@ import com.memtrip.picsy.camera.thread.CameraCaptureThread;
 import com.memtrip.picsy.camera.thread.CameraReverseThread;
 import com.memtrip.picsy.camera.thread.CameraStartThread;
 import com.memtrip.picsy.utils.CameraUtils;
+import com.memtrip.picsy.utils.DisplayUtils;
 import com.memtrip.picsy.view.PreviewView;
 
 /**
@@ -33,7 +34,7 @@ public class CameraHolder implements PictureCallback {
     public static final int CAMERA_REVERSE = 0x3;
 
     public interface OnPhotoCaptured {
-        public void onPhotoCaptured(Bitmap bitmap, String uri);
+        public void onPhotoCaptured(String uri);
     }
 
     public void setOnPhotoCaptured(OnPhotoCaptured newVal) {
@@ -67,8 +68,7 @@ public class CameraHolder implements PictureCallback {
                     break;
 
                 case CAMERA_PHOTO_CAPTURE:
-                    CameraCaptureThread.Response captureResponse = (CameraCaptureThread.Response)msg.obj;
-                    mOnPhotoCaptured.onPhotoCaptured(captureResponse.getBitmap(),captureResponse.getUri());
+                    mOnPhotoCaptured.onPhotoCaptured((String)msg.obj);
                     break;
             }
         }
@@ -86,7 +86,7 @@ public class CameraHolder implements PictureCallback {
             mCamera = camera;
             mCameraProvider.setDefaultParameters(camera, cameraType, PICTURE_QUALITY, mContext);
             mCameraProvider.setOrientation(display, camera, cameraType);
-            previewView.start(camera, cameraType, mCameraProvider);
+            previewView.start(camera, mCameraProvider);
             mCurrentCamera = cameraType;
         }
     }
@@ -148,6 +148,7 @@ public class CameraHolder implements PictureCallback {
 
     @Override
     public void onPictureTaken(byte[] data, Camera camera) {
-        new CameraCaptureThread(mCameraHandler,data,mCurrentCamera,mContext).start();
+        int dimen = DisplayUtils.getDisplayWidth(mDisplay);
+        new CameraCaptureThread(mCameraHandler,data,mCurrentCamera,dimen,mContext).start();
     }
 }
