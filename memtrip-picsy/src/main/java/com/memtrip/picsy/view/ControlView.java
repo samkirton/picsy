@@ -8,11 +8,13 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.os.Handler;
+import android.widget.LinearLayout;
 
 import com.memtrip.picsy.R;
 import com.memtrip.picsy.camera.CameraHolder;
@@ -26,7 +28,8 @@ import java.util.LinkedHashMap;
  * UI components for managing the state of the camera
  */
 public class ControlView extends FrameLayout implements View.OnClickListener, ToggleView.OnToggleSwitch, Animation.AnimationListener {
-    private FrameLayout uiControlTabTrayLayout;
+    private FrameLayout uiCameraSpacerLayout;
+    private LinearLayout uiControlTabTrayLayout;
     private FrameLayout uiSwitchAnimationLayout;
     private GridView uiGridView;
     private ImageView uiSelectGridImageView;
@@ -37,8 +40,6 @@ public class ControlView extends FrameLayout implements View.OnClickListener, To
     private Animation uiSwitchAnimation;
 
     private CameraHolder mCameraHolder;
-    private int mDisplayWidth;
-    private int mDisplayHeight;
 
     private static final int ANIMATION_WAIT = 1000;
 
@@ -60,9 +61,10 @@ public class ControlView extends FrameLayout implements View.OnClickListener, To
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         layoutInflater.inflate(R.layout.com_picsy_view_controls,this);
 
+        uiCameraSpacerLayout = (FrameLayout)findViewById(R.id.com_picsy_view_control_camera_spacer);
         uiSwitchAnimationLayout = (FrameLayout)findViewById(R.id.com_picsy_view_control_switch_animation_layout);
         uiGridView = (GridView)findViewById(R.id.com_picsy_view_control_grid);
-        uiControlTabTrayLayout = (FrameLayout)findViewById(R.id.com_picsy_view_control_tab_tray_layout);
+        uiControlTabTrayLayout = (LinearLayout)findViewById(R.id.com_picsy_view_control_tab_tray_layout);
         uiSelectGridImageView = (ImageView)findViewById(R.id.com_picsy_view_control_show_hide_grid_imageview);
         uiSwitchImageView = (ImageView)findViewById(R.id.com_picsy_view_control_switch);
         uiFlashToggleView = (ToggleView)findViewById(R.id.com_picsy_view_control_flash_toggleview);
@@ -77,16 +79,14 @@ public class ControlView extends FrameLayout implements View.OnClickListener, To
         uiSwitchAnimation.setAnimationListener(this);
 
         Display display = ((Activity)context).getWindowManager().getDefaultDisplay();
-        mDisplayWidth = DisplayUtils.getDisplayWidth(display);
-        mDisplayHeight = DisplayUtils.getDisplayHeight(display);
-        int height = mDisplayHeight - mDisplayWidth;
+        int width = DisplayUtils.getDisplayWidth(display);
 
         setCaptureBackgroundColor(attrs);
         setTabTrayBackgroundColor(attrs);
         setCaptureIcon(attrs);
 
         buildFlashToggleView(uiFlashToggleView);
-        setControlLayoutParams(uiControlTabTrayLayout,mDisplayWidth,height);
+        setControlLayoutParams(uiCameraSpacerLayout,width,width);
     }
 
     private void setCaptureBackgroundColor(AttributeSet attrs) {
@@ -128,11 +128,10 @@ public class ControlView extends FrameLayout implements View.OnClickListener, To
         }
     }
 
-    private void setControlLayoutParams(FrameLayout controlLayout, int width, int height) {
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)controlLayout.getLayoutParams();
+    private void setControlLayoutParams(ViewGroup controlLayout, int width, int height) {
+        ViewGroup.LayoutParams params = controlLayout.getLayoutParams();
         params.width = width;
         params.height = height;
-        params.gravity = Gravity.BOTTOM;
     }
 
     private void buildFlashToggleView(ToggleView toggleView) {

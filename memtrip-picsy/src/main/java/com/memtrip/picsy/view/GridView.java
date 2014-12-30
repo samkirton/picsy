@@ -10,9 +10,6 @@ import android.view.View;
 import com.memtrip.picsy.R;
 import com.memtrip.picsy.utils.DisplayUtils;
 
-/**
- *
- */
 public class GridView extends View {
     private int mWidth;
     private int mSection;
@@ -73,22 +70,22 @@ public class GridView extends View {
             int xSections = (int)Math.floor(mWidth / mSection);
             for (int i = 1; i <= xSections; i++) {
                 canvas.drawLine(
-                        mSection *i,
-                        0,
-                        mSection *i,
-                        mWidth,
-                        mLinePaint
+                    mSection *i,
+                    0,
+                    mSection *i,
+                    mWidth,
+                    mLinePaint
                 );
             }
 
             int ySections = (int)Math.floor(mWidth / mSection);
             for (int i = 1; i <= ySections; i++) {
                 canvas.drawLine(
-                        0,
-                        mSection*i,
-                        mWidth,
-                        mSection*i,
-                        mLinePaint
+                    0,
+                    mSection*i,
+                    mWidth,
+                    mSection*i,
+                    mLinePaint
                 );
             }
         }
