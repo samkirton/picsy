@@ -17,12 +17,19 @@ public class BitmapUtils {
         if (flipScale)
             matrix.setScale(-1, 1);
 
+        int dimen = 0;
+        if (bitmap.getWidth() > bitmap.getHeight()) {
+            dimen = bitmap.getHeight();
+        } else {
+            dimen = bitmap.getWidth();
+        }
+
         Bitmap newBitmap = Bitmap.createBitmap(
             bitmap,
             0,
             0,
-            bitmap.getWidth(),
-            bitmap.getWidth(),
+            dimen,
+            dimen,
             matrix,
             true
         );

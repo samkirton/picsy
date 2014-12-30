@@ -1,1 +1,1 @@
-include ':memtrip-picsy'
+include ':memtrip-picsy', ':sample'

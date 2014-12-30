@@ -18,7 +18,6 @@ import java.util.List;
  */
 public class CameraProvider {
     private static final int OPTIMAL_WIDTH = 1280;
-    private static final int OPTIMAL_HEIGHT = 768;
 
     /**
      * @param   context The context used to retrieve the package manager
@@ -125,7 +124,7 @@ public class CameraProvider {
         Camera.Size size = sizes.get(0);
         for (int i = 0; i < sizes.size(); i++) {
             // choose optimal first
-            if (sizes.get(i).width == OPTIMAL_WIDTH && sizes.get(i).height == OPTIMAL_HEIGHT) {
+            if (sizes.get(i).width == OPTIMAL_WIDTH) {
                 size = sizes.get(i);
                 break;
             // choose the highest resolution second
