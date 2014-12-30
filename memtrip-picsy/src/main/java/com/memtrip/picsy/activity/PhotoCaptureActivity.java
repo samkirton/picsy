@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
 
+import com.memtrip.picsy.R;
 import com.memtrip.picsy.camera.CameraHolder;
 import com.memtrip.picsy.camera.CameraProvider;
 import com.memtrip.picsy.view.ControlView;
@@ -22,10 +23,10 @@ public class PhotoCaptureActivity extends Activity implements CameraHolder.OnPho
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.memtrip.picsy.sample.R.layout.activity_photo_capture);
+        setContentView(R.layout.activity_photo_capture);
         getActionBar().hide();
-        uiPreviewView = (PreviewView)findViewById(com.memtrip.picsy.sample.R.id.start_camera);
-        uiControlView = (ControlView)findViewById(com.memtrip.picsy.sample.R.id.start_control);
+        uiPreviewView = (PreviewView)findViewById(R.id.start_camera);
+        uiControlView = (ControlView)findViewById(R.id.start_control);
 
         mCameraHolder = new CameraHolder(this, new CameraProvider(), uiPreviewView,getWindowManager().getDefaultDisplay());
         mCameraHolder.setOnPhotoCaptured(this);
