@@ -20,6 +20,8 @@ public class BitmapUtils {
         if (flipScale)
             matrix.setScale(-1, 1);
 
+        matrix.setRotate(rotation);
+
         int dimen;
         if (bitmap.getWidth() > bitmap.getHeight()) {
             dimen = bitmap.getHeight();
@@ -40,6 +42,15 @@ public class BitmapUtils {
         return newBitmap;
     }
 
+    public static int getManufactuerSpecificRotation(int deviceType) {
+        int rotation = 0;
+
+        if (android.os.Build.MANUFACTURER.contains("samsung")) {
+            rotation = 90;
+        }
+
+        return rotation;
+    }
 
     /**
      * Calculate the rotation required for the image to be converted into portrait

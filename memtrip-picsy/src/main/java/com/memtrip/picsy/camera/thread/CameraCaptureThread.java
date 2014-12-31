@@ -39,7 +39,8 @@ public class CameraCaptureThread extends Thread {
         );
 
         boolean shouldFlip = (mCameraType == Camera.CameraInfo.CAMERA_FACING_FRONT);
-        bitmap = BitmapUtils.cropBitmap(bitmap, 0, shouldFlip);
+        int rotation = BitmapUtils.getManufactuerSpecificRotation(0);
+        bitmap = BitmapUtils.cropBitmap(bitmap, rotation, shouldFlip);
 
         String title = "random";
         String uri = CapturePhotoUtils.insertImage(
