@@ -20,30 +20,24 @@ public class BitmapUtils {
         if (flipScale)
             matrix.setScale(-1, 1);
 
-        matrix.setRotate(rotation);
-
-        int dimen;
-        if (bitmap.getWidth() > bitmap.getHeight()) {
-            dimen = bitmap.getHeight();
-        } else {
-            dimen = bitmap.getWidth();
-        }
+        if (rotation != -1)
+            matrix.setRotate(rotation);
 
         Bitmap newBitmap = Bitmap.createBitmap(
             bitmap,
             0,
             0,
-            dimen,
-            dimen,
+            bitmap.getWidth(),
+            bitmap.getHeight(),
             matrix,
-            false
+            true
         );
 
         return newBitmap;
     }
 
     public static int getManufactuerSpecificRotation(int deviceType) {
-        int rotation = 0;
+        int rotation = -1;
 
         if (android.os.Build.MANUFACTURER.contains("samsung")) {
             rotation = 90;

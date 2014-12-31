@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="com_picsy_activity_camera_background">#000000</color>
-    <color name="com_picsy_activity_camera_header_background">#212121</color>
+    <color name="com_picsy_activity_camera_background">#212121</color>
+    <color name="com_picsy_activity_camera_header_background">#99212121</color>
     <color name="com_picsy_activity_camera_controls_background">#111111</color>
     <color name="com_picsy_activity_camera_switch_background">#111111</color>
     <color name="com_picsy_activity_camera_flash_background">#FFFFFF</color>

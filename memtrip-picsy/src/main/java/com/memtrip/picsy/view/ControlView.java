@@ -28,14 +28,11 @@ import java.util.LinkedHashMap;
  * UI components for managing the state of the camera
  */
 public class ControlView extends FrameLayout implements View.OnClickListener, ToggleView.OnToggleSwitch, Animation.AnimationListener {
-    private FrameLayout uiCameraSpacerLayout;
     private LinearLayout uiControlTabTrayLayout;
     private FrameLayout uiSwitchAnimationLayout;
-    private GridView uiGridView;
     private ImageView uiSelectGridImageView;
     private ImageView uiSwitchImageView;
     private ToggleView uiFlashToggleView;
-    private FrameLayout uiCaptureLayout;
     private ImageView uiCaptureImageView;
     private Animation uiSwitchAnimation;
 
@@ -61,14 +58,11 @@ public class ControlView extends FrameLayout implements View.OnClickListener, To
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         layoutInflater.inflate(R.layout.com_picsy_view_controls,this);
 
-        uiCameraSpacerLayout = (FrameLayout)findViewById(R.id.com_picsy_view_control_camera_spacer);
         uiSwitchAnimationLayout = (FrameLayout)findViewById(R.id.com_picsy_view_control_switch_animation_layout);
-        uiGridView = (GridView)findViewById(R.id.com_picsy_view_control_grid);
         uiControlTabTrayLayout = (LinearLayout)findViewById(R.id.com_picsy_view_control_tab_tray_layout);
         uiSelectGridImageView = (ImageView)findViewById(R.id.com_picsy_view_control_show_hide_grid_imageview);
         uiSwitchImageView = (ImageView)findViewById(R.id.com_picsy_view_control_switch);
         uiFlashToggleView = (ToggleView)findViewById(R.id.com_picsy_view_control_flash_toggleview);
-        uiCaptureLayout = (FrameLayout)findViewById(R.id.com_picsy_view_control_capture_layout);
         uiCaptureImageView = (ImageView)findViewById(R.id.com_picsy_view_control_capture_imageview);
         uiSwitchAnimation = AnimationUtils.loadAnimation(getContext(),R.anim.com_picsy_camera_switch_camera);
 
@@ -78,28 +72,10 @@ public class ControlView extends FrameLayout implements View.OnClickListener, To
         uiCaptureImageView.setOnClickListener(this);
         uiSwitchAnimation.setAnimationListener(this);
 
-        Display display = ((Activity)context).getWindowManager().getDefaultDisplay();
-        int width = DisplayUtils.getDisplayWidth(display);
-
-        setCaptureBackgroundColor(attrs);
         setTabTrayBackgroundColor(attrs);
         setCaptureIcon(attrs);
 
         buildFlashToggleView(uiFlashToggleView);
-        setControlLayoutParams(uiCameraSpacerLayout,width,width);
-    }
-
-    private void setCaptureBackgroundColor(AttributeSet attrs) {
-        int captureBackgroundColor = ViewUtils.getColorFromAttribute(
-            this,
-            attrs,
-            R.styleable.attrs_view_control,
-            R.styleable.attrs_view_control_captureBackgroundColor
-        );
-
-        if (captureBackgroundColor != -1) {
-            uiCaptureLayout.setBackgroundColor(captureBackgroundColor);
-        }
     }
 
     private void setTabTrayBackgroundColor(AttributeSet attrs) {
@@ -126,12 +102,6 @@ public class ControlView extends FrameLayout implements View.OnClickListener, To
         if (drawable != null) {
             uiCaptureImageView.setImageDrawable(drawable);
         }
-    }
-
-    private void setControlLayoutParams(ViewGroup controlLayout, int width, int height) {
-        ViewGroup.LayoutParams params = controlLayout.getLayoutParams();
-        params.width = width;
-        params.height = height;
     }
 
     private void buildFlashToggleView(ToggleView toggleView) {
@@ -162,17 +132,6 @@ public class ControlView extends FrameLayout implements View.OnClickListener, To
         }, ANIMATION_WAIT);
     }
 
-    /**
-     * Toggle the grid view visibility
-     */
-    private void toggleGridView() {
-        if (uiGridView.getVisibility() == View.VISIBLE) {
-            uiGridView.setVisibility(View.GONE);
-        } else {
-            uiGridView.setVisibility(View.VISIBLE);
-        }
-    }
-
     @Override
     public void onClick(View v) {
         if (v == uiSwitchImageView) {
@@ -182,7 +141,7 @@ public class ControlView extends FrameLayout implements View.OnClickListener, To
             animateFlash();;
             mCameraHolder.capture();
         } else if (v == uiSelectGridImageView) {
-            toggleGridView();
+            //TODO: open gallary
         }
     }
 

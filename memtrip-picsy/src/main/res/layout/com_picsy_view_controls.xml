@@ -7,101 +7,75 @@
         android:layout_height="match_parent"
         android:background="@color/com_picsy_activity_camera_switch_background"
         android:visibility="gone"/>
-
-    <com.memtrip.picsy.view.GridView
-        android:id="@+id/com_picsy_view_control_grid"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
 	
     <LinearLayout
         android:id="@+id/com_picsy_view_control_tab_tray_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:id="@+id/com_picsy_view_control_camera_spacer"
+        <ImageView
+            android:id="@+id/com_picsy_view_control_capture_imageview"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginBottom="@dimen/com_picsy_padding_medium"
+            android:src="@drawable/com_picsy_view_control_capture"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/com_picsy_activity_camera_background"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/com_picsy_activity_camera_header_background">
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_weight=".33"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/com_picsy_padding_medium"
-                    android:layout_marginBottom="@dimen/com_picsy_padding_medium">
-
-                    <ImageView
-                        android:id="@+id/com_picsy_view_control_show_hide_grid_imageview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:padding="@dimen/com_picsy_padding_medium"
-                        android:src="@drawable/com_picsy_view_control_grid"/>
-
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_weight=".33"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/com_picsy_padding_medium"
-                    android:layout_marginBottom="@dimen/com_picsy_padding_medium">
-
-                    <ImageView
-                        android:id="@+id/com_picsy_view_control_switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:padding="@dimen/com_picsy_padding_medium"
-                        android:src="@drawable/com_picsy_view_control_switch"/>
-
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_weight=".33"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/com_picsy_padding_medium"
-                    android:layout_marginBottom="@dimen/com_picsy_padding_medium">
-
-                    <com.memtrip.picsy.view.ToggleView
-                        android:id="@+id/com_picsy_view_control_flash_toggleview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:padding="@dimen/com_picsy_padding_medium"/>
-
-                </FrameLayout>
-
-            </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/com_picsy_activity_camera_header_background">
 
             <FrameLayout
-                android:id="@+id/com_picsy_view_control_capture_layout"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_width="0dp"
+                android:layout_weight=".33"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/com_picsy_padding_medium"
+                android:layout_marginBottom="@dimen/com_picsy_padding_medium">
 
                 <ImageView
-                    android:id="@+id/com_picsy_view_control_capture_imageview"
+                    android:id="@+id/com_picsy_view_control_show_hide_grid_imageview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:src="@drawable/com_picsy_view_control_capture"/>
+                    android:layout_gravity="center_horizontal"
+                    android:padding="@dimen/com_picsy_padding_medium"
+                    android:src="@drawable/com_picsy_view_control_grid"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_weight=".33"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/com_picsy_padding_medium"
+                android:layout_marginBottom="@dimen/com_picsy_padding_medium">
+
+                <ImageView
+                    android:id="@+id/com_picsy_view_control_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="@dimen/com_picsy_padding_medium"
+                    android:src="@drawable/com_picsy_view_control_switch"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_weight=".33"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/com_picsy_padding_medium"
+                android:layout_marginBottom="@dimen/com_picsy_padding_medium">
+
+                <com.memtrip.picsy.view.ToggleView
+                    android:id="@+id/com_picsy_view_control_flash_toggleview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="@dimen/com_picsy_padding_medium"/>
 
             </FrameLayout>
 
