@@ -37,7 +37,7 @@
                 android:layout_marginBottom="@dimen/com_picsy_padding_medium">
 
                 <ImageView
-                    android:id="@+id/com_picsy_view_control_show_hide_grid_imageview"
+                    android:id="@+id/com_picsy_view_control_select_album_grid_imageview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"

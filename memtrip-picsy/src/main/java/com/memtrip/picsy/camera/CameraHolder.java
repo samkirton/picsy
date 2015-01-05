@@ -35,6 +35,7 @@ public class CameraHolder implements PictureCallback {
 
     public interface OnPhotoCaptured {
         public void onPhotoCaptured(String uri);
+        public void onPhotoCapturePressed();
     }
 
     public void setOnPhotoCaptured(OnPhotoCaptured newVal) {
@@ -95,6 +96,7 @@ public class CameraHolder implements PictureCallback {
      * Capture a photo
      */
     public void capture() {
+        mOnPhotoCaptured.onPhotoCapturePressed();
         mCamera.takePicture(null, null, this);
     }
 

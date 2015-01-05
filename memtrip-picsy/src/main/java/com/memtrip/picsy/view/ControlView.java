@@ -1,14 +1,10 @@
 package com.memtrip.picsy.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
@@ -19,7 +15,6 @@ import android.widget.LinearLayout;
 import com.memtrip.picsy.R;
 import com.memtrip.picsy.camera.CameraHolder;
 import com.memtrip.picsy.utils.CameraUtils;
-import com.memtrip.picsy.utils.DisplayUtils;
 import com.memtrip.picsy.utils.ViewUtils;
 
 import java.util.LinkedHashMap;
@@ -30,7 +25,7 @@ import java.util.LinkedHashMap;
 public class ControlView extends FrameLayout implements View.OnClickListener, ToggleView.OnToggleSwitch, Animation.AnimationListener {
     private LinearLayout uiControlTabTrayLayout;
     private FrameLayout uiSwitchAnimationLayout;
-    private ImageView uiSelectGridImageView;
+    private ImageView uiSelectAlbumImageView;
     private ImageView uiSwitchImageView;
     private ToggleView uiFlashToggleView;
     private ImageView uiCaptureImageView;
@@ -54,20 +49,27 @@ public class ControlView extends FrameLayout implements View.OnClickListener, To
         mCameraHolder = cameraHolder;
     }
 
+    public void setDisabled() {
+        uiSelectAlbumImageView.setEnabled(false);
+        uiSwitchImageView.setEnabled(false);
+        uiFlashToggleView.setEnabled(false);
+        uiCaptureImageView.setEnabled(false);
+    }
+
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         layoutInflater.inflate(R.layout.com_picsy_view_controls,this);
 
         uiSwitchAnimationLayout = (FrameLayout)findViewById(R.id.com_picsy_view_control_switch_animation_layout);
         uiControlTabTrayLayout = (LinearLayout)findViewById(R.id.com_picsy_view_control_tab_tray_layout);
-        uiSelectGridImageView = (ImageView)findViewById(R.id.com_picsy_view_control_show_hide_grid_imageview);
+        uiSelectAlbumImageView = (ImageView)findViewById(R.id.com_picsy_view_control_select_album_grid_imageview);
         uiSwitchImageView = (ImageView)findViewById(R.id.com_picsy_view_control_switch);
         uiFlashToggleView = (ToggleView)findViewById(R.id.com_picsy_view_control_flash_toggleview);
         uiCaptureImageView = (ImageView)findViewById(R.id.com_picsy_view_control_capture_imageview);
         uiSwitchAnimation = AnimationUtils.loadAnimation(getContext(),R.anim.com_picsy_camera_switch_camera);
 
         uiFlashToggleView.setOnToggleSwitch(this);
-        uiSelectGridImageView.setOnClickListener(this);
+        uiSelectAlbumImageView.setOnClickListener(this);
         uiSwitchImageView.setOnClickListener(this);
         uiCaptureImageView.setOnClickListener(this);
         uiSwitchAnimation.setAnimationListener(this);
@@ -140,7 +142,7 @@ public class ControlView extends FrameLayout implements View.OnClickListener, To
         } else if (v == uiCaptureImageView) {
             animateFlash();;
             mCameraHolder.capture();
-        } else if (v == uiSelectGridImageView) {
+        } else if (v == uiSelectAlbumImageView) {
             //TODO: open gallary
         }
     }

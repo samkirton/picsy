@@ -53,4 +53,9 @@ public class PhotoCaptureActivity extends Activity implements CameraHolder.OnPho
         setResult(RESULT_CODE,intent);
         finish();
     }
+
+    @Override
+    public void onPhotoCapturePressed() {
+        uiControlView.setDisabled();
+    }
 }
