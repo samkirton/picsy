@@ -9,16 +9,20 @@ Picsy is a lightweight photo capture library that simplifies capturing 1:1 aspec
 
 How to use
 =====
-To include the library in your main project, clone it in of your project's directories then within your `settings.gradle` add the following line:
+To include the library in your main project, clone the into of your project's directories via:
 
-    include ':DIRWHEREPICSYISCLONED:picsy:memtrip-picsy'
+    git clone https://github.com/samkirton/picsy.git
 
-You will also want to add it to your `build.gradle` under the dependencies section like so:
+Then within your `settings.gradle` add the following line:
 
-	dependencies {
-	    ...
-		compile project(':DIRWHEREPICSYISCLONED:picsy:memtrip-picsy')
-	}
+    include ':DIR_WHERE_PICSY_IS_CLONED:picsy:memtrip-picsy'
+
+You will also want to add the lib to your `build.gradle` under the dependencies section like so:
+
+    dependencies {
+        ...
+    	compile project(':DIR_WHERE_PICSY_IS_CLONED:picsy:memtrip-picsy')
+    }
 
 Depending on which components of the library you're using you may need to add the following features and permissions to your AndroidManifest.xml
 
@@ -28,5 +32,3 @@ Depending on which components of the library you're using you may need to add th
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
 Please note, not all features of this lib need access to those permissions & features so include only if necessary.
-
-
